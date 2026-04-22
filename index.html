@@ -255,9 +255,9 @@ const CARDS = [
       <h2>Recurrent UTI (≥2 in 6 mo OR ≥3 in 1 yr)</h2>
       <ul>
         <li>Evaluate: UA, culture, PVR; cystoscopy and upper-tract imaging considered in women with risk factors</li>
-        <li>Prevention: topical vaginal estrogen in post-menopausal women (strong evidence), cranberry (weak), increased fluids</li>
-        <li>Prophylaxis options: daily low-dose (nitrofurantoin 50-100 mg), post-coital single dose, self-start therapy</li>
-        <li>Methenamine hippurate: non-antibiotic prevention option</li>
+        <li><strong>Post-menopausal women: topical vaginal estrogen is the highest-yield intervention</strong> (AUA/SUFU 2022, strongly recommends) — restores vaginal flora and urothelial integrity. Do not cycle antibiotics without adding this. See the <strong>GSM / Vaginal Estrogen</strong> card for dosing.</li>
+        <li>Other prevention: increased fluids (strong), methenamine hippurate (non-antibiotic, moderate evidence), cranberry (weak/mixed)</li>
+        <li>Prophylaxis options: daily low-dose (nitrofurantoin 50-100 mg), post-coital single dose, self-start therapy — only after non-antibiotic options tried</li>
       </ul>
 
       <div class="redflag"><strong>Red flags:</strong> Fever, flank pain, CVA tenderness, N/V → pyelonephritis workup. Visible hematuria → complete AUA hematuria workup even if UTI found. Male "cystitis" is not uncomplicated — workup for complicated source.</div>
@@ -604,13 +604,12 @@ const CARDS = [
         <li>Rare: NAION (sudden vision loss), priapism (&gt;4h = emergency), sudden hearing loss</li>
       </ul>
 
-      <h2>Testosterone</h2>
+      <h2>Testosterone (brief — see the Testosterone Therapy card for full detail)</h2>
       <ul>
         <li>Check ONLY if symptoms of hypogonadism (low libido, fatigue, depression, reduced muscle mass)</li>
-        <li><strong>Two morning total testosterone levels</strong> &lt;300 ng/dL</li>
-        <li>Before treatment: CBC (polycythemia), PSA, DRE; rule out sleep apnea</li>
-        <li>Monitoring: H/H, PSA, testosterone level; formulations — topical gels, patches, IM (T enanthate/cypionate), subcutaneous pellets, nasal, buccal</li>
-        <li>Fertility consideration: TRT suppresses spermatogenesis — discuss if patient wants children</li>
+        <li><strong>Two morning total testosterone levels</strong> &lt;300 ng/dL before starting TRT</li>
+        <li>Isolated ED with normal/equivocal T: optimize PDE5i and lifestyle first — TRT alone rarely fixes isolated ED</li>
+        <li><strong>Discuss fertility before any TRT</strong> — suppresses spermatogenesis</li>
       </ul>
 
       <h2>Second-Line</h2>
@@ -1069,6 +1068,183 @@ const CARDS = [
     sources: [
       { label: 'AUA: Vasectomy Guideline (2012, amended 2015)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/vasectomy-guideline' }
     ]
+  },
+
+  {
+    id: 'trt',
+    category: 'clinical',
+    title: 'Testosterone Therapy (Male)',
+    tags: ['hormone', 'trt', 'male', 'testosterone', 'hypogonadism'],
+    tldr: 'Diagnose hypogonadism by SYMPTOMS plus two AM total testosterones <300 ng/dL. Do not screen asymptomatic men. Before starting TRT: rule out pituitary cause, sleep apnea, prostate concerns, and DISCUSS FERTILITY — TRT suppresses spermatogenesis. Monitor PSA, H/H, and symptoms.',
+    body: `
+      <h2>When to Test</h2>
+      <p>Test only if symptoms suggest hypogonadism. Do NOT screen asymptomatic men.</p>
+      <ul>
+        <li>Low libido, erectile dysfunction, morning erection loss</li>
+        <li>Fatigue, depressed mood, reduced sense of wellbeing</li>
+        <li>Decreased muscle mass or strength, increased fat</li>
+        <li>Osteoporosis / low-trauma fracture in a man</li>
+        <li>Unexplained anemia</li>
+        <li>Type 2 diabetes or metabolic syndrome (increased prevalence of low T)</li>
+        <li>HIV-associated weight loss</li>
+      </ul>
+
+      <h2>Diagnosis</h2>
+      <ul>
+        <li><strong>Two separate morning total testosterone levels</strong> (ideally 8-10 AM, fasting) below the lab's reference range (commonly &lt;300 ng/dL)</li>
+        <li>If equivocal or SHBG-altering condition (obesity, DM, thyroid, liver): also measure <strong>free testosterone</strong> and <strong>SHBG</strong></li>
+        <li>If low confirmed: measure <strong>LH and FSH</strong> to classify:
+          <ul>
+            <li><strong>Primary</strong> (testicular): high LH/FSH — e.g., prior orchitis, trauma, Klinefelter</li>
+            <li><strong>Secondary</strong> (hypothalamic-pituitary): low or inappropriately normal LH/FSH — check <strong>prolactin</strong> to rule out pituitary adenoma; MRI if prolactin elevated or other concerns</li>
+          </ul>
+        </li>
+        <li>Baseline before treatment: CBC (H/H), PSA and DRE (especially if ≥40), estradiol, lipid panel, A1c</li>
+      </ul>
+
+      <h2>Critical Before Starting: FERTILITY</h2>
+      <div class="redflag"><strong>TRT suppresses spermatogenesis.</strong> Any man who wants biological children now or in the future must be counseled BEFORE starting exogenous testosterone. Options that preserve fertility: <strong>clomiphene citrate</strong> (off-label, stimulates endogenous LH/FSH), <strong>hCG</strong> (LH analog), <strong>aromatase inhibitor</strong> (anastrozole) if elevated estradiol. Sperm banking is always an option. Recovery after stopping TRT can take 6-24 months or longer.</div>
+
+      <h2>Other Pre-Treatment Considerations</h2>
+      <ul>
+        <li><strong>Sleep apnea</strong>: TRT can worsen — screen and treat before starting</li>
+        <li><strong>Prostate</strong>: no active prostate cancer, no palpable nodule; PSA above age-appropriate threshold warrants workup first</li>
+        <li><strong>Erythrocytosis</strong>: baseline Hct &lt;50%</li>
+        <li><strong>Cardiovascular</strong>: the TRAVERSE trial (2023) supports CV safety in appropriately selected men; individualize</li>
+        <li><strong>Breast cancer or untreated severe lower urinary tract symptoms (IPSS >19)</strong>: relative contraindications</li>
+      </ul>
+
+      <h2>Formulations</h2>
+      <ul>
+        <li><strong>Topical gels</strong> (AndroGel, Testim, Fortesta, Vogelxo): daily; counsel on skin-to-skin transfer (cover application site, especially around children/pregnant partners)</li>
+        <li><strong>Intramuscular injection</strong> (testosterone cypionate or enanthate): every 1-2 weeks; peaks/troughs in mood and energy</li>
+        <li><strong>Subcutaneous pellets</strong> (Testopel): implanted every 3-6 months in clinic</li>
+        <li><strong>Long-acting IM</strong> (testosterone undecanoate / Aveed): every 10 weeks; REMS program due to pulmonary oil microembolism risk</li>
+        <li><strong>Nasal spray</strong> (Natesto): TID dosing, short half-life, less HPG suppression — may preserve fertility somewhat</li>
+        <li><strong>Buccal tablet</strong> (Striant), <strong>transdermal patch</strong> (Androderm)</li>
+      </ul>
+
+      <h2>Monitoring</h2>
+      <ul>
+        <li><strong>Testosterone level</strong> at 3-6 months, then annually. Target mid-normal range (~400-700 ng/dL total). Timing depends on formulation — trough for IM, mid-cycle for pellets, 2-4 hours after gel.</li>
+        <li><strong>Hematocrit</strong> at 3, 6, 12 months, then annually. Hold or dose-reduce if Hct &gt;54% (phlebotomy may be needed).</li>
+        <li><strong>PSA and DRE</strong> at 3-6 months, then annually (if candidate for prostate ca screening).</li>
+        <li>Re-assess symptoms; consider bone density in osteoporosis patients.</li>
+      </ul>
+
+      <h2>Reasons to Stop or Pause Therapy</h2>
+      <ul>
+        <li>PSA rise &gt;1.4 ng/mL in 12 months, or sustained velocity &gt;0.4 ng/mL/year, or new palpable nodule</li>
+        <li>Hematocrit &gt;54% despite dose adjustment</li>
+        <li>New or worsening obstructive sleep apnea</li>
+        <li>Unexplained cardiovascular event</li>
+        <li>Partner pregnancy desired (switch to fertility-preserving regimen)</li>
+      </ul>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Testosterone is symptom-driven, not number-driven. A man with a T of 250 but no symptoms does not need treatment. A man with T of 320 and classic symptoms may benefit from a trial — document response.</li>
+        <li>If ED is the only symptom and T is equivocal: optimize PDE5i and lifestyle first; TRT alone rarely fixes isolated ED.</li>
+        <li>"Low T" marketing has outpaced the evidence — set realistic expectations and push back on patients asking for TRT to improve athletic performance.</li>
+        <li>Never call testosterone replacement "bioidentical hormones" in a way that implies it's risk-free.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Testosterone Deficiency (2018, amended 2023)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline' }
+    ]
+  },
+
+  {
+    id: 'gsm',
+    category: 'clinical',
+    title: 'Genitourinary Syndrome of Menopause (GSM) & Vaginal Estrogen',
+    tags: ['gsm', 'female', 'menopause', 'vaginal estrogen', 'recurrent uti', 'hormone'],
+    tldr: 'Post-menopausal vaginal atrophy, dyspareunia, urinary urgency/dysuria, and recurrent UTIs. Topical vaginal estrogen is highly effective with minimal systemic absorption and is the single highest-yield intervention for post-menopausal recurrent UTI. Safe long-term; usable in most breast cancer survivors with oncology coordination.',
+    body: `
+      <h2>What It Is</h2>
+      <p>GSM (older terms: "vaginal atrophy," "atrophic vaginitis") is the constellation of vulvar, vaginal, and urinary symptoms from estrogen deficiency at menopause. It's under-recognized, under-treated, and hugely quality-of-life affecting.</p>
+
+      <h2>Presentation — any combination of:</h2>
+      <ul>
+        <li><strong>Vaginal/vulvar</strong>: dryness, burning, itching, irritation, dyspareunia, post-coital bleeding, loss of libido secondary to discomfort</li>
+        <li><strong>Urinary</strong>: urgency, frequency, dysuria, <strong>recurrent UTIs</strong>, urge incontinence worsening</li>
+        <li><strong>Exam</strong>: pale, thin, shiny vaginal mucosa; loss of rugae; narrowed introitus; urethral prolapse/caruncle; petechiae; elevated vaginal pH (&gt;4.5); parabasal cells on wet mount</li>
+      </ul>
+
+      <h2>Workup</h2>
+      <ul>
+        <li>Pelvic exam — confirms atrophy, rules out other causes (lichen sclerosus, infection, malignancy)</li>
+        <li>UA + culture if urinary symptoms</li>
+        <li>Any <strong>postmenopausal bleeding</strong> → evaluate for endometrial pathology; do NOT chalk up to atrophy alone</li>
+        <li>Any vulvar lesion or mass → biopsy; don't dismiss as atrophy</li>
+      </ul>
+
+      <h2>Treatment — Stepped</h2>
+
+      <h3 style="margin-top:12px;color:var(--text);font-size:15px;">1. Non-hormonal (always offer; often adjunct):</h3>
+      <ul>
+        <li><strong>Vaginal moisturizers</strong> (Replens, Hyalo-Gyn, Revaree) — use regularly (3x/week), not just during sex; polycarbophil-based stay attached to mucosa longer than water-based</li>
+        <li><strong>Lubricants for sex</strong> — water or silicone-based; avoid glycerin if irritation</li>
+        <li><strong>Regular sexual activity or vaginal dilation</strong> — improves vascular supply and elasticity</li>
+      </ul>
+
+      <h3 style="margin-top:12px;color:var(--text);font-size:15px;">2. Topical vaginal estrogen (highly effective, low systemic absorption):</h3>
+      <ul>
+        <li><strong>Estradiol vaginal cream</strong> (Estrace 0.01%): 0.5-1 g PV nightly x 2 weeks, then 2-3x/week maintenance</li>
+        <li><strong>Estradiol vaginal tablet</strong> (Vagifem / Yuvafem): 10 mcg insert nightly x 2 weeks, then 2x/week</li>
+        <li><strong>Estradiol vaginal ring</strong> (Estring): 7.5 mcg/day, replace every 3 months — good for adherence</li>
+        <li><strong>Conjugated equine estrogen cream</strong> (Premarin): 0.5 g PV per regimen</li>
+        <li><strong>Low-dose DHEA vaginal</strong> (Intrarosa / prasterone): 6.5 mg insert nightly — converted to estrogen and androgen locally; alternative for patients who prefer non-estrogen</li>
+        <li><strong>Vaginal DHEA and vaginal estrogen</strong> do NOT require progesterone in women with a uterus (per ACOG, NAMS) because systemic levels stay within postmenopausal range</li>
+      </ul>
+
+      <h3 style="margin-top:12px;color:var(--text);font-size:15px;">3. Oral options:</h3>
+      <ul>
+        <li><strong>Ospemifene</strong> (Osphena) — oral SERM, FDA-approved for dyspareunia from GSM; alternative when vaginal route not preferred</li>
+      </ul>
+
+      <h3 style="margin-top:12px;color:var(--text);font-size:15px;">4. Energy-based devices:</h3>
+      <ul>
+        <li>Vaginal laser / radiofrequency (MonaLisa, etc.) — evidence mixed; not first-line; out-of-pocket cost typically</li>
+      </ul>
+
+      <h2>The Recurrent UTI Angle — Don't Miss This</h2>
+      <div style="background:rgba(61,90,128,0.08);border-left:3px solid var(--accent);padding:12px 14px;border-radius:4px;margin:8px 0;">
+        <strong>Topical vaginal estrogen is THE single highest-yield intervention for recurrent UTI in post-menopausal women (AUA/SUFU 2022 strongly recommends).</strong> It restores vaginal pH, lactobacillus colonization, and urothelial integrity. Evidence is much stronger than cranberry or methenamine. Use it early; don't cycle through courses of antibiotics without adding this.
+      </div>
+      <p>Systemic estrogen does NOT have the same effect on UTI prevention and should not be used for this purpose.</p>
+
+      <h2>Safety — Common Concerns</h2>
+      <ul>
+        <li><strong>Systemic absorption is minimal</strong> at standard doses — serum estradiol stays within postmenopausal range</li>
+        <li><strong>No increased risk of breast ca, endometrial ca, or VTE</strong> demonstrated with low-dose vaginal estrogen</li>
+        <li><strong>Breast cancer survivors</strong>: most can use with oncology coordination — especially after 2+ years disease-free, for severe GSM not responsive to non-hormonal therapy. Vaginal DHEA (Intrarosa) is often preferred in this setting. Coordinate with oncology.</li>
+        <li><strong>Endometrial cancer or active breast cancer on AI therapy</strong>: individualize with oncology; DHEA or non-hormonal first</li>
+        <li>FDA "black-box" warning on vaginal estrogen products is class-based from systemic HRT data — patient counseling should contextualize; dose matters</li>
+      </ul>
+
+      <h2>Red Flags</h2>
+      <div class="redflag">
+        <ul style="margin:6px 0;">
+          <li>Any <strong>postmenopausal bleeding</strong> → transvaginal US and/or endometrial biopsy; do NOT attribute to atrophy until evaluated.</li>
+          <li>Persistent vulvar lesion, white patches, or thickening → <strong>biopsy</strong> (consider lichen sclerosus, vulvar intraepithelial neoplasia, vulvar ca).</li>
+          <li>Symptoms unresolved despite 8-12 weeks of topical estrogen → reassess: lichen sclerosus, pudendal neuralgia, pelvic floor dysfunction, chronic pelvic pain syndrome.</li>
+        </ul>
+      </div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Patients often use vaginal estrogen "occasionally" and under-dose. Maintenance of 2-3x/week is what maintains the effect. Set clear expectations.</li>
+        <li>Effect takes 2-4 weeks to start; full benefit at 8-12 weeks.</li>
+        <li>For older women with recurrent UTIs, always ask specifically about GSM symptoms — many won't volunteer vaginal complaints.</li>
+        <li>Androgen therapy for female low libido is off-label in the U.S. and controversial; not first-line; refer to gynecology or menopause specialist if considering.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/CUA/SUFU: Recurrent Uncomplicated UTI in Women (2022)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/recurrent-uti' },
+      { label: 'NAMS Position Statement on GSM (2020)', url: 'https://menopause.org/professional-resources/position-statements' },
+      { label: 'ACOG: The Use of Vaginal Estrogen in Women With a History of Estrogen-Dependent Breast Cancer', url: 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2016/03/the-use-of-vaginal-estrogen-in-women-with-a-history-of-estrogen-dependent-breast-cancer' }
+    ]
   }
 ];
 
@@ -1393,7 +1569,18 @@ const GLOSSARY = [
   { abbr: 'BID / TID / QID', full: 'Twice / three times / four times daily', note: 'Medication frequency.' },
   { abbr: 'Fr', full: 'French (catheter size)', note: '1 Fr = 1/3 mm outer diameter. 16-18 Fr is typical adult urethral.' },
   { abbr: 'Foley', full: 'Foley catheter', note: 'Indwelling urethral catheter with inflatable balloon.' },
-  { abbr: 'Coudé', full: 'Coudé-tip catheter', note: 'Bent-tip catheter for navigating enlarged prostate.' }
+  { abbr: 'Coudé', full: 'Coudé-tip catheter', note: 'Bent-tip catheter for navigating enlarged prostate.' },
+  { abbr: 'ACOG', full: 'American College of Obstetricians and Gynecologists', note: 'Guideline body relevant for GSM, vaginal estrogen, postmenopausal care.' },
+  { abbr: 'DHEA', full: 'Dehydroepiandrosterone', note: 'Adrenal androgen precursor. Vaginal DHEA (Intrarosa/prasterone) is an alternative to vaginal estrogen for GSM.' },
+  { abbr: 'FSH', full: 'Follicle-stimulating hormone', note: 'Pituitary gonadotropin. High in primary hypogonadism (testicular failure); low in secondary (pituitary/hypothalamic).' },
+  { abbr: 'GSM', full: 'Genitourinary syndrome of menopause', note: 'Vulvar, vaginal, and urinary symptoms from post-menopausal estrogen deficiency. Older term: vaginal atrophy.' },
+  { abbr: 'hCG', full: 'Human chorionic gonadotropin', note: 'LH analog. Preserves spermatogenesis and testicular size; used instead of or alongside TRT when fertility matters. (bHCG as tumor marker is a separate use.)' },
+  { abbr: 'H/H', full: 'Hemoglobin and hematocrit', note: 'Monitor on TRT — polycythemia is a class side effect; hold if Hct >54%.' },
+  { abbr: 'HPG axis', full: 'Hypothalamic-pituitary-gonadal axis', note: 'GnRH → LH/FSH → testicular testosterone/spermatogenesis. TRT suppresses this loop.' },
+  { abbr: 'LH', full: 'Luteinizing hormone', note: 'Pituitary gonadotropin. Stimulates testicular Leydig cells to make testosterone. Drives ovarian steroidogenesis in women.' },
+  { abbr: 'NAMS', full: 'North American Menopause Society', note: 'Authoritative body for menopause / GSM / hormone therapy guidance.' },
+  { abbr: 'SERM', full: 'Selective estrogen receptor modulator', note: 'Tissue-selective estrogen-receptor agonists/antagonists. Clomiphene (male fertility), ospemifene (GSM dyspareunia), tamoxifen, raloxifene.' },
+  { abbr: 'SHBG', full: 'Sex hormone-binding globulin', note: 'Carrier protein for testosterone. Altered by obesity, thyroid, liver disease — total T can be misleading; measure free T in those cases.' }
 ];
 
 /* ============================================================
