@@ -1,0 +1,1960 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Uro Ref">
+<link rel="manifest" href="./manifest.json">
+<title>Uro Ref</title>
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --bg-elev: #ffffff;
+    --bg-elev-2: #ece9e0;
+    --border: #ddd7ca;
+    --border-strong: #cbc3b3;
+    --text: #1f1d19;
+    --text-dim: #5c5850;
+    --text-faint: #8c8778;
+    --accent: #3d5a80;
+    --accent-dim: #6b87a8;
+    --danger: #a04040;
+    --success: #4a7048;
+    --on-accent: #ffffff;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --serif: Georgia, "Playfair Display", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-text-size-adjust: 100%; }
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); min-height: 100vh; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
+  input, textarea, select { font: inherit; color: inherit; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; width: 100%; }
+  input:focus, textarea:focus, select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+  textarea { font-family: var(--sans); resize: vertical; min-height: 80px; }
+
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(246,244,239,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand { font-family: var(--serif); font-weight: 700; font-size: 20px; color: var(--accent); letter-spacing: 0.02em; }
+  .brand-sub { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; margin-top: -2px; }
+  .top-actions { margin-left: auto; display: flex; gap: 8px; }
+  .icon-btn { width: 38px; height: 38px; border-radius: 8px; background: var(--bg-elev); border: 1px solid var(--border); display: grid; place-items: center; font-size: 18px; }
+  .icon-btn:active { background: var(--bg-elev-2); }
+
+  nav.tabs {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 63px; z-index: 9;
+  }
+  nav.tabs button {
+    padding: 12px 6px; font-size: 13px; color: var(--text-dim);
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+  }
+  nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main { padding: 16px; max-width: 820px; margin: 0 auto; }
+
+  .disclaimer {
+    background: var(--bg-elev); border: 1px solid var(--accent-dim); border-radius: 10px;
+    padding: 16px; margin-bottom: 20px;
+  }
+  .disclaimer h2 { margin: 0 0 8px; font-family: var(--serif); font-size: 17px; color: var(--accent); }
+  .disclaimer p { margin: 0 0 10px; font-size: 14px; color: var(--text-dim); line-height: 1.55; }
+  .disclaimer p:last-child { margin-bottom: 0; }
+  .disclaimer .ack-btn { background: var(--accent); color: var(--on-accent); padding: 10px 16px; border-radius: 8px; font-weight: 600; margin-top: 10px; }
+
+  .search-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .search-bar input { flex: 1; }
+  .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; }
+  .chip { padding: 6px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 999px; white-space: nowrap; color: var(--text-dim); background: var(--bg-elev); }
+  .chip.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+
+  .card-grid { display: grid; gap: 10px; }
+  .card-item { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: left; display: block; width: 100%; }
+  .card-item:active { background: var(--bg-elev-2); }
+  .card-item h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 17px; color: var(--text); }
+  .card-item p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.45; }
+  .card-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 2px 8px; background: var(--bg-elev-2); color: var(--text-faint); border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .card-detail h1 { font-family: var(--serif); font-size: 26px; margin: 0 0 6px; color: var(--accent); line-height: 1.2; }
+  .card-detail .tldr { background: var(--bg-elev); border-left: 3px solid var(--accent); padding: 12px 14px; border-radius: 4px; font-size: 15px; color: var(--text); margin: 16px 0 20px; line-height: 1.55; }
+  .card-detail h2 { font-family: var(--serif); font-size: 18px; margin: 24px 0 8px; color: var(--text); }
+  .card-detail ul { padding-left: 22px; margin: 6px 0 10px; }
+  .card-detail li { margin: 4px 0; color: var(--text-dim); }
+  .card-detail li strong { color: var(--text); font-weight: 600; }
+  .card-detail p { margin: 6px 0 10px; color: var(--text-dim); }
+  .card-detail .redflag { background: rgba(160,64,64,0.06); border-left: 3px solid var(--danger); padding: 10px 14px; border-radius: 4px; margin: 8px 0; }
+  .card-detail .redflag strong { color: var(--danger); }
+  .sources { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .sources h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin: 0 0 8px; }
+  .sources a { display: block; font-size: 14px; padding: 8px 12px; background: var(--bg-elev); border-radius: 6px; margin-bottom: 6px; }
+
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); margin-bottom: 12px; font-size: 14px; }
+  .back-btn:hover { color: var(--accent); }
+
+  .flowchart-node { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 12px 0; }
+  .flowchart-question { font-family: var(--serif); font-size: 17px; color: var(--text); margin: 0 0 14px; line-height: 1.35; }
+  .flowchart-branches { display: grid; gap: 8px; }
+  .flowchart-branch-btn { text-align: left; padding: 12px 14px; background: var(--bg-elev-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
+  .flowchart-branch-btn:active { background: var(--bg); border-color: var(--accent-dim); }
+  .flowchart-branch-btn::after { content: "→"; color: var(--accent); font-weight: 600; margin-left: 12px; }
+  .flowchart-outcome { background: rgba(61,90,128,0.08); border: 1px solid var(--accent-dim); border-radius: 10px; padding: 16px; font-size: 15px; line-height: 1.55; color: var(--text); }
+  .flowchart-outcome strong { color: var(--accent); }
+  .breadcrumb { font-size: 13px; color: var(--text-faint); margin-bottom: 12px; line-height: 1.4; }
+  .breadcrumb button { color: var(--text-dim); text-decoration: underline; }
+  .breadcrumb button:hover { color: var(--accent); }
+
+  .claude-panel textarea { min-height: 120px; font-size: 15px; }
+  .claude-submit { background: var(--accent); color: var(--on-accent); padding: 12px 18px; border-radius: 8px; font-weight: 600; font-size: 15px; margin-top: 10px; width: 100%; }
+  .claude-submit:disabled { background: var(--border); color: var(--text-faint); }
+  .claude-hint { font-size: 12px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
+
+  .claude-response { margin-top: 20px; padding: 16px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 10px; font-size: 15px; line-height: 1.6; }
+  .claude-response h2 { font-family: var(--serif); font-size: 17px; margin: 18px 0 6px; color: var(--accent); }
+  .claude-response h2:first-child { margin-top: 0; }
+  .claude-response ul, .claude-response ol { padding-left: 22px; }
+  .claude-response li { margin: 4px 0; color: var(--text); }
+  .claude-response p { margin: 6px 0; color: var(--text); }
+  .claude-response .cite { color: var(--accent); text-decoration: underline; cursor: pointer; }
+  .claude-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-faint); font-style: italic; }
+  .claude-error { background: rgba(160,64,64,0.08); border: 1px solid var(--danger); color: var(--danger); padding: 12px 14px; border-radius: 8px; margin-top: 12px; font-size: 14px; }
+  .claude-loading { color: var(--text-dim); font-style: italic; padding: 20px; text-align: center; }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(40,36,30,0.55); z-index: 100; display: grid; place-items: center; padding: 16px; }
+  .modal { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-family: var(--serif); margin: 0 0 14px; font-size: 20px; color: var(--accent); }
+  .modal label { display: block; font-size: 13px; color: var(--text-dim); margin: 12px 0 4px; }
+  .modal-close { float: right; color: var(--text-dim); font-size: 22px; margin-top: -4px; }
+  .modal .model-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+  .model-opt { padding: 10px; background: var(--bg-elev-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 14px; }
+  .model-opt.active { border-color: var(--accent); background: rgba(61,90,128,0.08); color: var(--accent); }
+  .modal .hint { font-size: 12px; color: var(--text-faint); margin-top: 4px; line-height: 1.45; }
+  .modal .save-btn { background: var(--accent); color: var(--on-accent); padding: 10px 16px; border-radius: 8px; font-weight: 600; margin-top: 16px; width: 100%; }
+
+  .gap-item { background: var(--bg-elev); border: 1px solid var(--border); padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; gap: 10px; }
+  .gap-item .gap-text { color: var(--text); }
+  .gap-item .gap-date { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+  .gap-item .gap-del { color: var(--text-faint); font-size: 18px; padding: 0 4px; }
+
+  .empty { text-align: center; color: var(--text-faint); padding: 40px 20px; font-size: 14px; }
+
+  @media (min-width: 680px) {
+    .card-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   DATA: Reference Cards (15)
+   All content compiled from AUA guidelines as of training.
+   VERIFY against the linked source before clinical use.
+   ============================================================ */
+const CARDS = [
+  {
+    id: 'bph',
+    category: 'clinical',
+    title: 'BPH / LUTS (Male)',
+    tags: ['luts', 'bph', 'male', 'medical mgmt'],
+    tldr: 'Most common cause of LUTS in men >50. Quantify with IPSS/AUA-SI. Start alpha blocker for symptoms; add 5-ARI for larger glands (>30-40cc); combine if severe. Refer for surgery if refractory, retention, or complications.',
+    body: `
+      <h2>Workup</h2>
+      <ul>
+        <li><strong>IPSS / AUA-SI</strong> score (0-35): mild 0-7, moderate 8-19, severe 20-35</li>
+        <li><strong>DRE</strong>: size/consistency/nodules; rule out prostate ca</li>
+        <li><strong>UA</strong> (rule out infection, hematuria)</li>
+        <li><strong>PSA</strong> if life expectancy >10 yr and would affect management</li>
+        <li><strong>Post-void residual</strong> (bladder scan): elevated suggests retention risk</li>
+        <li><strong>Uroflowmetry</strong> if available: Qmax &lt;10 mL/s suggests obstruction</li>
+      </ul>
+
+      <h2>Medical Management</h2>
+      <ul>
+        <li><strong>Alpha blockers</strong> (fast relief, days): tamsulosin 0.4 mg qhs (most common), silodosin, alfuzosin, doxazosin. Watch for orthostasis, floppy iris syndrome (tell ophthalmology before cataract surgery).</li>
+        <li><strong>5-alpha reductase inhibitors</strong> (slow, weeks-months): finasteride 5 mg daily or dutasteride 0.5 mg daily. Best for prostates >30-40 cc. Halves PSA (double the measured value for ca screening). Side effects: ED, decreased libido.</li>
+        <li><strong>Combination</strong> (alpha blocker + 5-ARI): best for moderate-severe symptoms with enlarged gland. MTOPS, CombAT trials.</li>
+        <li><strong>Antimuscarinic or beta-3 agonist</strong> (mirabegron): add if significant storage/OAB component after obstruction addressed.</li>
+        <li><strong>Tadalafil 5 mg daily</strong>: approved for LUTS + ED together.</li>
+      </ul>
+
+      <h2>Surgical Referral Triggers</h2>
+      <ul>
+        <li>Refractory symptoms despite adequate medical therapy</li>
+        <li>Recurrent UTIs attributable to retention</li>
+        <li>Bladder stones</li>
+        <li>Recurrent gross hematuria attributable to BPH</li>
+        <li>Acute urinary retention (especially recurrent)</li>
+        <li>Renal insufficiency from obstruction</li>
+        <li>Patient preference (declining medical therapy)</li>
+      </ul>
+      <p>Procedures by gland size and patient factors: UroLift and Rezum (smaller glands, preserves ejaculation), TURP (workhorse, <80 cc), PVP/GreenLight laser, HoLEP or Aquablation (large glands).</p>
+
+      <div class="redflag"><strong>Red flags:</strong> Acute retention, gross hematuria with clots, refractory symptoms, new-onset LUTS &lt;45 (rare BPH), neurologic symptoms (MS, spinal cord pathology).</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Ask about OTC meds: decongestants and anticholinergics can precipitate retention.</li>
+        <li>Nocturia workup is broader than BPH: consider sleep apnea, CHF, diabetes, nocturnal polyuria (&gt;33% of 24h output overnight).</li>
+        <li>If starting 5-ARI, recheck and document PSA at 6 mo to establish new baseline; any later rise is significant.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Management of BPH (2023)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/benign-prostatic-hyperplasia-(bph)-guideline' }
+    ]
+  },
+
+  {
+    id: 'cystitis',
+    category: 'clinical',
+    title: 'Uncomplicated Cystitis (Women)',
+    tags: ['uti', 'female', 'infection', 'antibiotics'],
+    tldr: 'Dysuria, frequency, urgency in non-pregnant, non-immunocompromised woman with normal GU tract and no fever. Diagnose clinically; UA confirms. First-line: nitrofurantoin 5 days or fosfomycin single dose. Culture only if atypical, pregnant, or treatment failure.',
+    body: `
+      <h2>Diagnosis</h2>
+      <ul>
+        <li>Classic triad: <strong>dysuria, frequency, urgency</strong>; often suprapubic discomfort</li>
+        <li><strong>UA</strong>: pyuria (leuk esterase +), nitrites (specific for Enterobacteriaceae, not sensitive); hematuria common</li>
+        <li><strong>Culture</strong> not required for uncomplicated first episode; obtain if: pregnancy, symptoms atypical, recent abx, treatment failure, recurrent UTI</li>
+      </ul>
+
+      <h2>First-Line Empiric Therapy</h2>
+      <ul>
+        <li><strong>Nitrofurantoin 100 mg BID x 5 days</strong> (avoid if CrCl &lt;30, pyelonephritis suspected)</li>
+        <li><strong>Fosfomycin 3 g PO x 1 dose</strong> (convenient; slightly less efficacy)</li>
+        <li><strong>TMP-SMX DS BID x 3 days</strong> (only if local E. coli resistance &lt;20% and no use in past 3 mo)</li>
+      </ul>
+
+      <h2>Second-Line</h2>
+      <ul>
+        <li><strong>Beta-lactams</strong> (amox-clav, cephalexin, cefpodoxime) x 5-7 days — inferior to first-line but OK when others contraindicated</li>
+        <li><strong>Fluoroquinolones</strong> (cipro, levo) — reserve due to collateral damage, tendon/CNS risks, C. diff</li>
+      </ul>
+
+      <h2>Recurrent UTI (≥2 in 6 mo OR ≥3 in 1 yr)</h2>
+      <ul>
+        <li>Evaluate: UA, culture, PVR; cystoscopy and upper-tract imaging considered in women with risk factors</li>
+        <li>Prevention: topical vaginal estrogen in post-menopausal women (strong evidence), cranberry (weak), increased fluids</li>
+        <li>Prophylaxis options: daily low-dose (nitrofurantoin 50-100 mg), post-coital single dose, self-start therapy</li>
+        <li>Methenamine hippurate: non-antibiotic prevention option</li>
+      </ul>
+
+      <div class="redflag"><strong>Red flags:</strong> Fever, flank pain, CVA tenderness, N/V → pyelonephritis workup. Visible hematuria → complete AUA hematuria workup even if UTI found. Male "cystitis" is not uncomplicated — workup for complicated source.</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Asymptomatic bacteriuria: <strong>do not treat</strong> except in pregnancy or before urologic procedures with mucosal trauma.</li>
+        <li>Dysuria without pyuria: consider vulvovaginitis, atrophic vaginitis, STI, urethral syndrome.</li>
+        <li>Post-menopausal women with recurrent UTI: topical estrogen is the highest-yield single intervention.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Recurrent Uncomplicated UTI in Women (2022)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/recurrent-uti' },
+      { label: 'IDSA: Uncomplicated UTI', url: 'https://www.idsociety.org/practice-guideline/uncomplicated-urinary-tract-infection/' }
+    ]
+  },
+
+  {
+    id: 'pyelo',
+    category: 'clinical',
+    title: 'Pyelonephritis / Complicated UTI',
+    tags: ['uti', 'infection', 'pyelonephritis', 'emergency'],
+    tldr: 'UTI + fever, flank pain, N/V. Obtain culture and blood work; image with CT abd/pelvis if failing treatment, diabetic, stone history, or concern for obstruction. Treat IV if toxic, oral if stable. Obstructed infected kidney = urgent decompression.',
+    body: `
+      <h2>Presentation & Workup</h2>
+      <ul>
+        <li><strong>Symptoms</strong>: dysuria/frequency PLUS fever (&gt;38°C), flank pain, CVA tenderness, N/V, sometimes sepsis</li>
+        <li><strong>Labs</strong>: UA (pyuria, often nitrite +), <strong>urine culture with sensitivities</strong>, CBC (leukocytosis), BMP (creatinine), lactate if septic</li>
+        <li><strong>Blood cultures</strong>: if ill-appearing, diabetic, immunocompromised, or being admitted</li>
+        <li><strong>Imaging</strong> (CT abd/pelvis with IV contrast if renal function allows):
+          <ul>
+            <li>Failing therapy at 48-72h</li>
+            <li>Diabetic, immunocompromised, or stone history</li>
+            <li>Recurrent pyelonephritis</li>
+            <li>Suspicion of obstruction, abscess, or emphysematous pyelonephritis</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2>Treatment — Outpatient (stable, tolerating PO, no red flags)</h2>
+      <ul>
+        <li><strong>Ciprofloxacin 500 mg BID x 7 days</strong> (if local FQ resistance &lt;10%)</li>
+        <li><strong>Levofloxacin 750 mg daily x 5 days</strong></li>
+        <li><strong>TMP-SMX DS BID x 14 days</strong> (only with proven susceptibility — avoid empirically)</li>
+        <li>Consider single IV/IM dose of ceftriaxone 1 g or aminoglycoside at initial visit, then transition to PO</li>
+      </ul>
+
+      <h2>Treatment — Inpatient</h2>
+      <ul>
+        <li><strong>Ceftriaxone 1-2 g IV daily</strong> (first-line if stable)</li>
+        <li><strong>Piperacillin-tazobactam</strong> or carbapenem if septic, healthcare-associated, or ESBL risk</li>
+        <li>Narrow by culture; total course typically 10-14 days</li>
+        <li>Transition to PO once afebrile 24-48 h and tolerating</li>
+      </ul>
+
+      <div class="redflag"><strong>Urgent: Obstructed, infected kidney = urologic emergency.</strong> Needs drainage (percutaneous nephrostomy or ureteral stent) WITH antibiotics. Do not just treat with abx. Source control is critical — can progress to urosepsis rapidly.</div>
+
+      <h2>Complications to Recognize</h2>
+      <ul>
+        <li><strong>Renal/perinephric abscess</strong>: failure to defervesce &gt;72h on appropriate abx — drain if &gt;3 cm</li>
+        <li><strong>Emphysematous pyelonephritis</strong>: gas in renal parenchyma, usually diabetic — mortality 20%+; nephrectomy often required</li>
+        <li><strong>Papillary necrosis</strong>: diabetic, sickle cell, analgesic overuse</li>
+        <li><strong>Xanthogranulomatous pyelonephritis</strong>: chronic, stone-associated; usually requires nephrectomy</li>
+      </ul>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Follow-up culture in pregnancy at completion; otherwise not needed if clinically improved.</li>
+        <li>Do NOT miss diabetes in a first-time severe pyelonephritis.</li>
+        <li>Recurrent pyelo in a woman: upper-tract imaging and cystoscopy indicated.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/CUA/SUFU: Recurrent UTI', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/recurrent-uti' },
+      { label: 'IDSA pyelonephritis guidance', url: 'https://www.idsociety.org/practice-guideline/uncomplicated-urinary-tract-infection/' }
+    ]
+  },
+
+  {
+    id: 'stones',
+    category: 'clinical',
+    title: 'Renal Colic / Nephrolithiasis (Acute)',
+    tags: ['stones', 'pain', 'emergency', 'imaging'],
+    tldr: 'Sudden severe flank pain, often radiating to groin, with N/V and hematuria. Non-contrast CT KUB is gold standard. Most stones <5 mm pass spontaneously; 5-10 mm benefit from MET (alpha blocker). Infection + obstruction = urgent drainage.',
+    body: `
+      <h2>Presentation</h2>
+      <ul>
+        <li>Acute colicky flank/abdominal pain, often radiates to groin/genitals</li>
+        <li>Restless (can't find comfortable position — unlike peritonitis)</li>
+        <li>N/V (very common)</li>
+        <li><strong>Microscopic or gross hematuria</strong> in ~90% (but absence doesn't rule out)</li>
+        <li>Dysuria/urgency if stone at ureterovesical junction</li>
+      </ul>
+
+      <h2>Workup</h2>
+      <ul>
+        <li><strong>UA</strong>: hematuria, crystals, pyuria (careful — sterile pyuria can occur from inflammation; if true infection, urgent!)</li>
+        <li><strong>BMP</strong>: baseline creatinine</li>
+        <li><strong>CBC</strong>: leukocytosis may indicate infection</li>
+        <li><strong>Non-contrast CT KUB</strong>: gold standard, &gt;95% sensitivity. Reports: stone size, location, laterality, hydronephrosis degree, presence of double J / anatomic variants</li>
+        <li><strong>Ultrasound</strong>: preferred in pregnancy and young women; less sensitive for stones but detects hydronephrosis</li>
+        <li><strong>KUB x-ray</strong>: useful for tracking radiopaque stones over time</li>
+      </ul>
+
+      <h2>Acute Management</h2>
+      <ul>
+        <li><strong>Hydration</strong>: oral if tolerating; IV if not</li>
+        <li><strong>NSAIDs first-line</strong> (more effective than opioids for colic): ketorolac 15-30 mg IV/IM (caution: eGFR)</li>
+        <li><strong>Opioids</strong> as adjunct or if NSAIDs contraindicated</li>
+        <li><strong>Antiemetics</strong>: ondansetron 4 mg IV</li>
+        <li><strong>Medical expulsive therapy (MET)</strong>: tamsulosin 0.4 mg daily for ureteral stones 5-10 mm, duration up to 4-6 wk (nifedipine alternative)</li>
+      </ul>
+
+      <h2>Likelihood of Spontaneous Passage</h2>
+      <ul>
+        <li>&lt;4 mm: ~80-90%</li>
+        <li>5-6 mm: ~50-60%</li>
+        <li>7-9 mm: ~20-30%</li>
+        <li>&gt;10 mm: very unlikely — plan intervention</li>
+      </ul>
+
+      <h2>Indications for Urologic Intervention</h2>
+      <ul>
+        <li><strong>Infection + obstruction = urgent drainage</strong> (PCN or ureteral stent) — do not delay</li>
+        <li>Uncontrolled pain despite adequate analgesia</li>
+        <li>Intractable N/V preventing oral intake</li>
+        <li>Solitary kidney or bilateral obstruction</li>
+        <li>Acute kidney injury attributable to obstruction</li>
+        <li>Stone failing to progress after ~4-6 weeks of observation + MET</li>
+      </ul>
+
+      <h2>Definitive Treatments (not urgent in most cases)</h2>
+      <ul>
+        <li><strong>Shock wave lithotripsy (SWL)</strong>: non-invasive; less effective for large, hard, or lower-pole stones</li>
+        <li><strong>Ureteroscopy (URS) with laser lithotripsy</strong>: most common; high stone-free rates; stent often placed</li>
+        <li><strong>Percutaneous nephrolithotomy (PCNL)</strong>: for large (&gt;2 cm) or complex renal stones</li>
+      </ul>
+
+      <div class="redflag"><strong>Red flags — urgent consult:</strong> Fever/signs of infection with obstructing stone. AKI. Solitary kidney with obstruction. Pregnancy with obstruction. Anuria. Uncontrolled pain.</div>
+
+      <h2>Metabolic Workup</h2>
+      <ul>
+        <li>First stone in low-risk patient: basic workup (stone analysis, serum chem, UA)</li>
+        <li>Recurrent stones, children, or high-risk: 24-hour urine collections x 2, parathyroid evaluation if hypercalciuria/hypercalcemia</li>
+        <li>Prevention: increase fluids to goal 2.5L urine/day; dietary counseling (sodium, animal protein, oxalate for calcium oxalate stones)</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Surgical Management of Stones (2016, amended)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/surgical-management-of-stones-guideline' },
+      { label: 'AUA: Medical Management of Stones (2014, amended)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/medical-management-of-kidney-stones-guideline' }
+    ]
+  },
+
+  {
+    id: 'gross-hematuria',
+    category: 'clinical',
+    title: 'Gross Hematuria',
+    tags: ['hematuria', 'malignancy', 'workup', 'cystoscopy'],
+    tldr: 'Visible blood in urine in an adult requires full AUA workup: CT urogram + cystoscopy (+/- cytology). Treating a UTI does not absolve the workup. Painless gross hematuria is bladder cancer until proven otherwise.',
+    body: `
+      <h2>Workup (AUA Recommendation)</h2>
+      <p>All adults with gross hematuria require:</p>
+      <ul>
+        <li><strong>Cystoscopy</strong> — mandatory (direct evaluation of bladder and urethra)</li>
+        <li><strong>CT urogram</strong> (non-contrast + contrast with delayed excretory phase) — evaluates upper tracts and bladder</li>
+        <li><strong>MR urogram</strong> if iodine contrast contraindicated</li>
+        <li><strong>Renal ultrasound + retrograde pyelogram</strong> if neither CT nor MR feasible</li>
+        <li><strong>Urine cytology</strong>: consider in high-risk patients (smoker, occupational exposure, older age, CIS concern)</li>
+      </ul>
+
+      <h2>Differential</h2>
+      <ul>
+        <li><strong>Malignancy</strong>: bladder cancer &gt; upper tract urothelial &gt; RCC — ~20% yield of workup for gross hematuria over age 50</li>
+        <li><strong>Stones</strong> (see card)</li>
+        <li><strong>Infection</strong> — does NOT complete the workup</li>
+        <li><strong>BPH</strong>: diagnosis of exclusion after tumor ruled out</li>
+        <li><strong>Trauma, catheter-related, recent instrumentation</strong></li>
+        <li><strong>Glomerular disease</strong> (dysmorphic RBCs, casts, proteinuria) → nephrology</li>
+        <li>Anticoagulation does not explain hematuria — workup is still indicated</li>
+      </ul>
+
+      <h2>Special Situations</h2>
+      <ul>
+        <li><strong>Clot retention</strong>: three-way Foley, continuous bladder irrigation; urgent consult</li>
+        <li><strong>Painless gross hematuria</strong>: classic for bladder ca; cysto and upper-tract imaging are not optional</li>
+        <li><strong>Hematuria with fever</strong>: may indicate infected tumor or pyelonephritis</li>
+      </ul>
+
+      <div class="redflag"><strong>Never dismiss:</strong> Gross hematuria attributed to UTI, BPH, or anticoagulation without a completed workup. All three can coexist with malignancy.</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Brown/cola-colored urine suggests glomerular source; bright red suggests urologic source.</li>
+        <li>Timing of hematuria during stream: initial (urethral/prostatic), terminal (bladder neck/trigone), total (upper tract or diffuse bladder).</li>
+        <li>Ask about beeturia, rifampin, phenazopyridine (pseudo-hematuria).</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Microhematuria Guideline (2020, amended)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/microhematuria' }
+    ]
+  },
+
+  {
+    id: 'microhematuria',
+    category: 'clinical',
+    title: 'Microhematuria (AUA 2020 Risk-Stratified)',
+    tags: ['hematuria', 'workup', 'risk stratification'],
+    tldr: 'Confirmed microhematuria = ≥3 RBC/HPF on a single, properly collected UA. Risk-stratify into low / intermediate / high — workup ranges from repeat UA to cystoscopy + CT urogram.',
+    body: `
+      <h2>Definition</h2>
+      <p>AUA 2020 defines microhematuria as <strong>≥3 RBC/HPF on a single properly collected UA</strong>. No longer requires repeat UA before risk stratification (simplified from 2012).</p>
+      <p>Proper collection: clean-catch midstream; exclude menstrual contamination, recent exercise/intercourse, recent instrumentation.</p>
+
+      <h2>Risk Stratification</h2>
+
+      <h3 style="margin-top:14px;color:var(--success);font-size:15px;">Low Risk — choose ONE:</h3>
+      <ul>
+        <li>Age &lt;40 years, never smoker, no risk factors, 3-10 RBC/HPF</li>
+        <li>Option A: repeat UA in 6 months (if persists, reclassify)</li>
+        <li>Option B: cystoscopy + renal ultrasound (shared decision)</li>
+      </ul>
+
+      <h3 style="margin-top:14px;color:var(--accent);font-size:15px;">Intermediate Risk:</h3>
+      <ul>
+        <li>Age 40-59 OR &lt;10 pack-year smoker</li>
+        <li>11-25 RBC/HPF</li>
+        <li>Additional risk factors (prior pelvic RT, cyclophosphamide, occupational exposure — aniline dyes, aromatic amines)</li>
+        <li>→ <strong>Cystoscopy + renal ultrasound</strong></li>
+      </ul>
+
+      <h3 style="margin-top:14px;color:var(--danger);font-size:15px;">High Risk:</h3>
+      <ul>
+        <li>Age ≥60 years</li>
+        <li>&gt;30 pack-year smoker</li>
+        <li>&gt;25 RBC/HPF on any UA</li>
+        <li>Prior gross hematuria</li>
+        <li>→ <strong>Cystoscopy + CT urogram</strong> (or MR urogram if contrast contraindicated)</li>
+      </ul>
+
+      <h2>Don't Miss the Nephrology Referral</h2>
+      <p>Refer to nephrology concurrently if any of:</p>
+      <ul>
+        <li>Dysmorphic RBCs on phase microscopy</li>
+        <li>RBC casts</li>
+        <li>Proteinuria</li>
+        <li>Elevated creatinine / decreased eGFR</li>
+        <li>Hypertension</li>
+      </ul>
+
+      <div class="redflag"><strong>Pearl:</strong> A common trap is attributing microhematuria to a UTI found incidentally, then not following up. Always repeat UA after UTI treatment; if hematuria persists, proceed with risk-stratified workup.</div>
+
+      <h2>Follow-Up After Negative Initial Workup</h2>
+      <ul>
+        <li>If persistent microhematuria after negative complete workup: shared-decision annual UA, repeat workup in 3-5 yr if risk factors develop</li>
+        <li>Any gross hematuria during follow-up → full gross hematuria workup</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Microhematuria Guideline (2020)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/microhematuria' }
+    ]
+  },
+
+  {
+    id: 'psa',
+    category: 'clinical',
+    title: 'PSA Screening & Elevated PSA',
+    tags: ['psa', 'prostate', 'cancer', 'screening'],
+    tldr: 'Offer shared-decision PSA screening 50-69 (45-49 if AA or FH of prostate ca, BRCA). Elevated PSA: repeat; then multiparametric MRI; biopsy if PI-RADS ≥3 or high clinical suspicion. Finasteride/dutasteride halve PSA — double the value.',
+    body: `
+      <h2>Screening Recommendations (AUA 2023)</h2>
+      <ul>
+        <li><strong>45-49</strong>: individualize; start if African American, family history of prostate ca (especially &lt;age 60 or lethal disease), BRCA1/2 mutation</li>
+        <li><strong>50-69</strong>: offer; shared decision</li>
+        <li><strong>40-44</strong>: only if very high risk (strong family history, BRCA)</li>
+        <li><strong>≥70 or life expectancy &lt;10-15 yr</strong>: generally do not screen routinely; individualize</li>
+        <li>Typical interval: every 2-4 years (can go longer if initial PSA low)</li>
+      </ul>
+
+      <h2>Interpreting Elevated PSA</h2>
+      <ul>
+        <li>Threshold traditionally &gt;4 ng/mL, but risk is continuous — no safe cutoff</li>
+        <li><strong>Repeat PSA</strong> before major workup — transient elevation from UTI, ejaculation (48h), prostatitis, instrumentation</li>
+        <li><strong>DRE</strong>: abnormal (nodule, induration) is independent indication regardless of PSA</li>
+      </ul>
+
+      <h2>Refined Risk Tools Before Biopsy</h2>
+      <ul>
+        <li><strong>Multiparametric MRI prostate</strong>: PI-RADS 1-2 low risk, 3 equivocal, 4-5 concerning. PI-RADS ≥3 generally warrants biopsy.</li>
+        <li><strong>PSA density</strong>: PSA ÷ prostate volume; &gt;0.15 ng/mL/cc suggests higher risk</li>
+        <li><strong>Free PSA %</strong>: &lt;10% concerning; &gt;25% reassuring</li>
+        <li><strong>4Kscore, PHI, SelectMDx, ExoDx</strong>: biomarkers to refine biopsy decision</li>
+      </ul>
+
+      <h2>Biopsy</h2>
+      <ul>
+        <li><strong>Transrectal</strong> (traditional) vs <strong>transperineal</strong> (lower infection risk, now increasingly preferred, local anesthesia in office)</li>
+        <li>MRI-targeted + systematic cores improves diagnostic yield</li>
+        <li>Counsel on: bleeding, infection (sepsis ~1-2% transrectal; much lower transperineal), urinary retention, hematospermia for weeks</li>
+      </ul>
+
+      <div class="redflag"><strong>Gotchas:</strong>
+        <ul style="margin:6px 0;">
+          <li>Men on <strong>5-ARIs (finasteride/dutasteride)</strong>: PSA is halved — DOUBLE the measured value to interpret for cancer screening.</li>
+          <li>Acute <strong>prostatitis</strong> or recent UTI: PSA can be markedly elevated; wait 4-6 weeks and recheck.</li>
+          <li>Very high PSA (&gt;50-100) with hard DRE: suspect locally advanced or metastatic disease; stage before biopsy if clinical picture clear.</li>
+        </ul>
+      </div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>"Routine PSA" without a prior shared-decision conversation is not recommended — document the discussion.</li>
+        <li>PSA velocity alone should not drive biopsy decisions; use total PSA, density, and MRI instead.</li>
+        <li>Active surveillance is a legitimate pathway for Gleason 6 disease — many AUA-endorsed protocols.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/SUO: Early Detection of Prostate Cancer (2023)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/early-detection-of-prostate-cancer-guideline' }
+    ]
+  },
+
+  {
+    id: 'ed',
+    category: 'clinical',
+    title: 'Erectile Dysfunction',
+    tags: ['ed', 'male', 'sexual', 'pde5'],
+    tldr: 'Inability to achieve/maintain erection for satisfactory sex ≥3 months. Assess cardiovascular risk — new ED can be a sentinel for CAD. First-line: PDE5i. Test AM total testosterone if low libido or fatigue. Refer for prosthesis if medical therapy fails.',
+    body: `
+      <h2>Workup</h2>
+      <ul>
+        <li><strong>IIEF-5 (SHIM)</strong> or similar validated tool</li>
+        <li><strong>CV risk assessment</strong>: ED is an independent predictor of future cardiac events — counsel and consider stress test if symptomatic or high-risk</li>
+        <li><strong>Labs</strong>: morning total testosterone, A1c, lipid panel, TSH if clinically indicated</li>
+        <li>Medication review: beta blockers, thiazides, SSRIs, 5-ARIs, antiandrogens, opioids</li>
+        <li>Lifestyle: smoking, alcohol, weight, exercise, sleep apnea</li>
+      </ul>
+
+      <h2>First-Line: PDE5 Inhibitors</h2>
+      <ul>
+        <li><strong>Sildenafil</strong> 25-100 mg 1h before activity (fatty meal reduces absorption)</li>
+        <li><strong>Tadalafil</strong> 10-20 mg PRN OR 2.5-5 mg daily (also treats LUTS from BPH)</li>
+        <li><strong>Vardenafil</strong>, <strong>avanafil</strong> (faster onset, less CV concerns)</li>
+        <li><strong>Absolute contraindication</strong>: any nitrate use (life-threatening hypotension). Alpha blockers OK with tadalafil but space sildenafil dosing.</li>
+        <li>Common side effects: headache, flushing, dyspepsia, nasal congestion, blue vision (sildenafil), myalgia/back pain (tadalafil)</li>
+        <li>Rare: NAION (sudden vision loss), priapism (&gt;4h = emergency), sudden hearing loss</li>
+      </ul>
+
+      <h2>Testosterone</h2>
+      <ul>
+        <li>Check ONLY if symptoms of hypogonadism (low libido, fatigue, depression, reduced muscle mass)</li>
+        <li><strong>Two morning total testosterone levels</strong> &lt;300 ng/dL</li>
+        <li>Before treatment: CBC (polycythemia), PSA, DRE; rule out sleep apnea</li>
+        <li>Monitoring: H/H, PSA, testosterone level; formulations — topical gels, patches, IM (T enanthate/cypionate), subcutaneous pellets, nasal, buccal</li>
+        <li>Fertility consideration: TRT suppresses spermatogenesis — discuss if patient wants children</li>
+      </ul>
+
+      <h2>Second-Line</h2>
+      <ul>
+        <li><strong>Intracavernosal injection</strong>: alprostadil, bimix, trimix — highly effective; risks: priapism, fibrosis, pain</li>
+        <li><strong>Intraurethral alprostadil (MUSE)</strong></li>
+        <li><strong>Vacuum erection device</strong>: mechanical, no contraindications; learning curve</li>
+      </ul>
+
+      <h2>Third-Line</h2>
+      <ul>
+        <li><strong>Penile prosthesis (implant)</strong>: malleable or inflatable 3-piece; high satisfaction in refractory cases; infection ~1-2%, revision eventually needed</li>
+      </ul>
+
+      <div class="redflag"><strong>Red flags:</strong> Sudden-onset ED without clear cause — consider psychogenic, neurologic, or vascular cause. Priapism &gt;4 hours is a urologic emergency. New ED in younger man with CV risk factors — have a low threshold for cardiac evaluation.</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>PDE5i "failure" is often inadequate dosing or timing — try maximal dose correctly timed before declaring failure.</li>
+        <li>Post-prostatectomy ED: early penile rehabilitation protocols improve recovery.</li>
+        <li>Don't forget counseling on partner communication — ED has a major relational component.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: Erectile Dysfunction (2018, amended)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/erectile-dysfunction-(ed)-guideline' },
+      { label: 'AUA: Testosterone Deficiency (2018, amended)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline' }
+    ]
+  },
+
+  {
+    id: 'sui',
+    category: 'clinical',
+    title: 'Stress Urinary Incontinence (Female)',
+    tags: ['incontinence', 'female', 'pelvic floor'],
+    tldr: 'Leakage with effort (cough/sneeze/exercise) without urge. First-line: pelvic floor PT. Pessary is effective and often underused. Surgery (midurethral sling) for refractory cases — generally high success.',
+    body: `
+      <h2>Diagnosis</h2>
+      <ul>
+        <li>History: leakage with cough, sneeze, laugh, exercise, position change; absence of urge</li>
+        <li><strong>Cough stress test</strong>: observe leakage with full bladder</li>
+        <li><strong>PVR</strong>: rule out overflow</li>
+        <li><strong>UA</strong>: rule out infection mimicking</li>
+        <li><strong>Bladder diary</strong> (3 days): fluid, voids, leaks, triggers</li>
+        <li><strong>Urodynamics</strong>: not required before primary anti-incontinence surgery in uncomplicated SUI per AUA; use selectively (mixed incontinence, prior surgery, neurogenic, overflow concerns)</li>
+      </ul>
+
+      <h2>First-Line: Conservative</h2>
+      <ul>
+        <li><strong>Pelvic floor muscle training (PFMT) with PT</strong>: most effective non-invasive; refer to pelvic floor physical therapist</li>
+        <li><strong>Weight loss</strong> if BMI elevated (significant impact)</li>
+        <li><strong>Pessary</strong>: incontinence dish/ring; good option for pregnancy, surgical candidates who want to defer, or those wanting non-surgical</li>
+        <li>Bladder training, fluid optimization, avoid evening caffeine</li>
+      </ul>
+
+      <h2>Surgical Options</h2>
+      <ul>
+        <li><strong>Midurethral sling</strong> (synthetic mesh, retropubic or transobturator): most common; high success (~85-90%); risks: mesh exposure, dyspareunia, voiding dysfunction</li>
+        <li><strong>Autologous fascial sling</strong>: no synthetic mesh; good option if mesh concern</li>
+        <li><strong>Burch colposuspension</strong>: less common now; appropriate with concurrent abdominal surgery</li>
+        <li><strong>Urethral bulking agents</strong>: office-based; less durable but minimally invasive — good for elderly, frail, or patients who want to avoid surgery</li>
+      </ul>
+
+      <div class="redflag"><strong>Important:</strong> Anticholinergics and beta-3 agonists do NOT treat SUI — they treat urge incontinence. Mixed incontinence (both types) requires addressing each component.</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Topical vaginal estrogen can improve symptoms in post-menopausal women by improving urethral coaptation.</li>
+        <li>Be explicit that sling surgery treats stress leakage, not urge leakage — if both, counsel on mixed picture.</li>
+        <li>Fluid restriction should not go below ~1.5-2 L/day — concentrated urine irritates the bladder.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/SUFU: Surgical Treatment of Female SUI (2023)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/stress-urinary-incontinence-(sui)-new-(aua/sufu-guideline-2017)' }
+    ]
+  },
+
+  {
+    id: 'oab',
+    category: 'clinical',
+    title: 'Overactive Bladder / Urge Incontinence',
+    tags: ['oab', 'incontinence', 'urgency', 'stepped care'],
+    tldr: 'Urgency ± incontinence, usually with frequency/nocturia, without UTI or obvious pathology. Stepped care: behavioral first; pharmacotherapy (beta-3 preferred in elderly); third-line: Botox, PTNS, sacral neuromodulation.',
+    body: `
+      <h2>Definition</h2>
+      <p>Urinary urgency, usually with frequency and nocturia, with or without urge urinary incontinence, in the absence of UTI or other obvious pathology (ICS definition).</p>
+
+      <h2>Workup</h2>
+      <ul>
+        <li>H&amp;P (including neurologic screen)</li>
+        <li><strong>UA</strong> to rule out infection/hematuria</li>
+        <li><strong>Bladder diary</strong> (3 days) — high-yield</li>
+        <li><strong>PVR</strong>: rule out retention (elevated PVR changes management)</li>
+        <li>Urodynamics selectively; cystoscopy if hematuria or suspicion of lesion</li>
+      </ul>
+
+      <h2>First-Line: Behavioral</h2>
+      <ul>
+        <li><strong>Bladder training</strong>: scheduled voiding, gradual interval increase</li>
+        <li><strong>Pelvic floor muscle training</strong> with urge suppression techniques (quick contractions to calm detrusor)</li>
+        <li>Fluid moderation (~1.5-2 L/day; avoid evening fluids)</li>
+        <li>Reduce caffeine, carbonation, artificial sweeteners, alcohol</li>
+        <li>Treat constipation</li>
+        <li>Weight loss if obese</li>
+      </ul>
+
+      <h2>Second-Line: Pharmacotherapy</h2>
+      <p>Trial adequate dose 4-8 weeks. Combination of anticholinergic + beta-3 is evidence-based if single agent insufficient.</p>
+      <ul>
+        <li><strong>Beta-3 agonists</strong> (preferred in elderly, dry mouth-sensitive, dementia risk, anticholinergic burden):
+          <ul>
+            <li>Mirabegron 25-50 mg daily (watch BP)</li>
+            <li>Vibegron 75 mg daily</li>
+          </ul>
+        </li>
+        <li><strong>Antimuscarinics</strong> (watch anticholinergic burden, avoid in dementia/narrow-angle glaucoma/gastric retention):
+          <ul>
+            <li>Oxybutynin IR / ER / transdermal</li>
+            <li>Tolterodine</li>
+            <li>Solifenacin 5-10 mg daily</li>
+            <li>Trospium (less CNS penetration)</li>
+            <li>Darifenacin, fesoterodine</li>
+          </ul>
+        </li>
+        <li>Topical vaginal estrogen: adjunct in post-menopausal women</li>
+      </ul>
+
+      <h2>Third-Line (refractory after adequate trial of first + second line)</h2>
+      <ul>
+        <li><strong>Intradetrusor onabotulinumtoxinA</strong>: 100 U for idiopathic OAB; 200 U for neurogenic. ~6-12 month duration. Counsel on risk of urinary retention requiring CIC.</li>
+        <li><strong>Peripheral tibial nerve stimulation (PTNS)</strong>: 12 weekly 30-minute sessions</li>
+        <li><strong>Sacral neuromodulation (InterStim)</strong>: staged implant; also for retention</li>
+      </ul>
+
+      <div class="redflag"><strong>Red flags — think beyond OAB:</strong> New neurologic symptoms (MS, stroke, spinal cord). Urge with hematuria — rule out CIS/bladder cancer. Rapid progression in older adult — consider bladder outlet obstruction with detrusor overactivity (mixed picture). Polyuria with nocturia — consider DM, DI, nocturnal polyuria, sleep apnea.</div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Anticholinergic burden is cumulative — a 78-year-old already on amitriptyline and diphenhydramine should not get oxybutynin. Favor beta-3.</li>
+        <li>Set expectations: no single agent works for everyone; 50% success rate per drug. Switch or combine.</li>
+        <li>Nocturia is often multifactorial — a "BPH pill" won't fix CHF-related nocturia.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/SUFU: Diagnosis and Treatment of OAB (2024)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/overactive-bladder-(oab)-guideline' }
+    ]
+  },
+
+  {
+    id: 'torsion',
+    category: 'clinical',
+    title: 'Testicular Torsion',
+    tags: ['emergency', 'scrotum', 'pain', 'surgical'],
+    tldr: 'SURGICAL EMERGENCY. Sudden severe scrotal pain, often in teen/young adult. High-riding, transverse lie, absent cremasteric reflex. Doppler US confirms but must NOT delay surgery if clinical picture is classic. Salvage rate near 100% if <6 hr, poor if >12 hr.',
+    body: `
+      <h2>Presentation</h2>
+      <ul>
+        <li>Sudden onset severe testicular/scrotal pain, often during sleep or activity</li>
+        <li>Common age: perinatal and 12-18 (but can occur any age)</li>
+        <li>Often associated N/V</li>
+        <li>Exam: tender, swollen, high-riding testis in <strong>transverse lie</strong>; <strong>absent cremasteric reflex</strong> on affected side</li>
+        <li>May have history of prior intermittent pain (intermittent torsion)</li>
+      </ul>
+
+      <h2>Differentiating from Other Acute Scrotum Causes</h2>
+      <ul>
+        <li><strong>Torsion of appendix testis</strong>: "blue dot sign" at upper pole, less severe pain, younger boys</li>
+        <li><strong>Epididymitis</strong>: usually older, often STI or UTI organism, fever, gradual onset, tender epididymis</li>
+        <li><strong>Trauma, incarcerated hernia, orchitis, Fournier's gangrene</strong></li>
+      </ul>
+
+      <h2>Workup — FAST</h2>
+      <ul>
+        <li><strong>Scrotal ultrasound with Doppler</strong>: decreased or absent flow in affected testis</li>
+        <li><strong>Do NOT wait for imaging</strong> if classic clinical picture — explore urgently; "time is testis"</li>
+        <li>Call urology immediately — do not wait for pediatric subspecialty referral</li>
+      </ul>
+
+      <h2>Management</h2>
+      <ul>
+        <li><strong>Emergent scrotal exploration</strong> with detorsion and orchiopexy of affected and contralateral testis (20% have bell-clapper deformity bilaterally)</li>
+        <li><strong>Manual detorsion</strong> can be attempted en route to OR: "opening a book" — rotate medially to laterally (most torsions are medial). Success reduces pain. Does NOT replace surgery; pexy still required.</li>
+        <li>Orchiectomy if non-viable testis at exploration</li>
+      </ul>
+
+      <h2>Salvage Rates by Time</h2>
+      <ul>
+        <li>&lt;6 hours: ~90-100%</li>
+        <li>6-12 hours: ~50%</li>
+        <li>12-24 hours: ~20%</li>
+        <li>&gt;24 hours: near 0%</li>
+      </ul>
+
+      <div class="redflag"><strong>Pearls that save testes:</strong>
+        <ul style="margin:6px 0;">
+          <li>Abdominal pain in a boy — examine the genitals.</li>
+          <li>Intermittent torsion = bilateral elective orchiopexy before progression to full torsion.</li>
+          <li>US with flow does not rule out intermittent torsion — take history seriously.</li>
+          <li>Trust the clinical picture; imaging is confirmatory, not gating.</li>
+        </ul>
+      </div>
+    `,
+    sources: [
+      { label: 'AUA Core Curriculum: Acute Scrotum', url: 'https://university.auanet.org/modules/webapps/core/index.cfm' }
+    ]
+  },
+
+  {
+    id: 'testicular-mass',
+    category: 'clinical',
+    title: 'Testicular Mass',
+    tags: ['cancer', 'oncology', 'male', 'urgent'],
+    tldr: 'Painless scrotal mass = cancer until proven otherwise. Peak age 15-35. Workup: scrotal US, tumor markers (AFP, bHCG, LDH), staging imaging. DO NOT biopsy transcutaneously. Treatment is radical INGUINAL orchiectomy — never transscrotal.',
+    body: `
+      <h2>Presentation</h2>
+      <ul>
+        <li>Painless, firm, unilateral scrotal mass (most common)</li>
+        <li>Some present with: dull ache, heaviness, hydrocele, gynecomastia, back pain (retroperitoneal metastasis), or incidental finding</li>
+        <li>Demographics: germ cell tumors peak 15-35 years; lymphoma common &gt;50</li>
+      </ul>
+
+      <h2>Workup</h2>
+      <ul>
+        <li><strong>Scrotal ultrasound</strong>: definitive initial imaging — intra- vs extratesticular, solid vs cystic</li>
+        <li><strong>Tumor markers BEFORE surgery</strong>:
+          <ul>
+            <li><strong>Alpha-fetoprotein (AFP)</strong>: elevated in non-seminomatous germ cell tumors (yolk sac, embryonal); NEVER elevated in pure seminoma</li>
+            <li><strong>Beta-hCG</strong>: elevated in choriocarcinoma, embryonal, and some seminomas</li>
+            <li><strong>LDH</strong>: marker of tumor burden/turnover</li>
+          </ul>
+        </li>
+        <li><strong>Staging</strong>: CT chest/abdomen/pelvis after diagnosis; brain MRI if widely metastatic or choriocarcinoma</li>
+        <li><strong>Sperm banking</strong> — discuss before any treatment</li>
+      </ul>
+
+      <h2>NEVER</h2>
+      <div class="redflag">
+        <ul style="margin:6px 0;">
+          <li>Do NOT biopsy transcutaneously — seeds tumor into scrotum and lymphatics.</li>
+          <li>Do NOT do a trans-scrotal orchiectomy — alters lymphatic drainage, worsens prognosis.</li>
+          <li>Do NOT reassure a solid intra-testicular mass as "probably nothing" — all get urologic evaluation.</li>
+        </ul>
+      </div>
+
+      <h2>Management</h2>
+      <ul>
+        <li><strong>Radical INGUINAL orchiectomy</strong>: gold standard diagnostic and therapeutic. High ligation of spermatic cord at internal ring.</li>
+        <li><strong>Testis-sparing surgery</strong>: rare indication (bilateral small tumors, solitary testis with small mass, known benign histology)</li>
+        <li>Adjuvant therapy depends on stage and histology:
+          <ul>
+            <li><strong>Seminoma</strong>: very radio- and chemo-sensitive; surveillance, adjuvant RT, or BEP chemo depending on stage</li>
+            <li><strong>Non-seminoma</strong>: surveillance, retroperitoneal lymph node dissection (RPLND), or BEP chemo</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2>Self-Exam Counseling</h2>
+      <p>Brief education: monthly after warm shower, feel for firm/painless nodule, compare sides, seek care for new findings. Testicular cancer is one of the most curable solid tumors when caught early.</p>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>AFP-elevated "seminoma" is actually non-seminomatous by treatment implications — histology reclassifies.</li>
+        <li>Post-orchiectomy markers should normalize predictably — elevation/failure to fall suggests residual disease.</li>
+        <li>Long-term: counsel on cardiovascular risk after platinum chemo, second malignancy risk after RT.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA/ASTRO/SUO: Early Stage Testicular Cancer', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/early-stage-testicular-cancer-guideline' }
+    ]
+  },
+
+  {
+    id: 'prostatitis',
+    category: 'clinical',
+    title: 'Acute Bacterial Prostatitis',
+    tags: ['infection', 'male', 'prostatitis', 'fever'],
+    tldr: 'Fever, pelvic/perineal pain, dysuria, often retention. Tender, boggy prostate on GENTLE DRE. E. coli most common. Treat with fluoroquinolone or Bactrim 4-6 weeks. AVOID vigorous prostate massage — bacteremia risk. PSA transiently elevated.',
+    body: `
+      <h2>Presentation</h2>
+      <ul>
+        <li>Fever, chills, malaise</li>
+        <li>Pelvic, perineal, rectal, or back pain</li>
+        <li>Dysuria, urgency, frequency</li>
+        <li>Obstructive symptoms, sometimes acute retention</li>
+        <li>Tender, warm, <strong>boggy prostate</strong> on DRE — perform gently</li>
+      </ul>
+
+      <h2>Workup</h2>
+      <ul>
+        <li><strong>UA + urine culture with sensitivities</strong></li>
+        <li>CBC (leukocytosis), BMP</li>
+        <li>Blood cultures if febrile/septic</li>
+        <li>PSA: will be elevated acutely — do NOT interpret for cancer screening until 6-8 weeks after treatment</li>
+        <li>Consider <strong>CT pelvis</strong> if not improving at 48-72 h: prostate abscess needs drainage</li>
+        <li>Bladder scan for retention</li>
+      </ul>
+
+      <h2>Treatment</h2>
+      <ul>
+        <li><strong>Outpatient (stable, tolerating PO)</strong>:
+          <ul>
+            <li>Ciprofloxacin 500 mg BID x 4-6 weeks (first-line if sensitive)</li>
+            <li>Levofloxacin 500-750 mg daily x 4-6 weeks</li>
+            <li>TMP-SMX DS BID x 4-6 weeks (alternative)</li>
+          </ul>
+        </li>
+        <li><strong>Inpatient</strong>: IV ceftriaxone or piperacillin-tazobactam or aminoglycoside; transition to PO with sensitivities</li>
+        <li><strong>Duration</strong>: 4-6 weeks (longer than cystitis) due to poor prostate penetration and risk of chronic prostatitis if undertreated</li>
+        <li>Retention: Foley or suprapubic tube (some avoid urethral catheter through infected prostate if possible; short-term Foley generally fine)</li>
+      </ul>
+
+      <div class="redflag"><strong>Pearls:</strong>
+        <ul style="margin:6px 0;">
+          <li>AVOID vigorous prostate massage in acute prostatitis — can cause bacteremia and sepsis.</li>
+          <li>Failure to improve at 48-72 h → consider prostate abscess (CT or TRUS) — needs drainage.</li>
+          <li>Sexually-active men &lt;35: consider N. gonorrhoeae and C. trachomatis — treat empirically.</li>
+        </ul>
+      </div>
+
+      <h2>Chronic Prostatitis (separate entity)</h2>
+      <ul>
+        <li><strong>Chronic bacterial prostatitis (CBP)</strong>: recurrent UTIs from same organism; 4-6 week fluoroquinolone</li>
+        <li><strong>Chronic prostatitis / chronic pelvic pain syndrome (CP/CPPS)</strong>: most common; usually NON-bacterial. Multimodal therapy — alpha blockers, PT, anti-inflammatories, pain management, psych support. Avoid prolonged antibiotic courses without objective bacterial evidence.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA / EAU prostatitis guidance', url: 'https://www.auanet.org/guidelines-and-quality/guidelines' }
+    ]
+  },
+
+  {
+    id: 'retention',
+    category: 'clinical',
+    title: 'Acute Urinary Retention',
+    tags: ['retention', 'emergency', 'catheter', 'bph'],
+    tldr: 'Sudden inability to void with painful distention. Common causes: BPH (most common in older men), meds (anticholinergics, opioids, sympathomimetics), post-op, neurogenic. Immediate Foley decompression. Start alpha blocker. Watch for post-obstructive diuresis.',
+    body: `
+      <h2>Presentation</h2>
+      <ul>
+        <li>Sudden inability to void, often with suprapubic pain and distention</li>
+        <li>Subacute/chronic: overflow incontinence, progressive obstructive symptoms, new-onset AKI</li>
+        <li>Bladder scan &gt;400 mL (often &gt;1 L in acute)</li>
+      </ul>
+
+      <h2>Differential — what put them in retention?</h2>
+      <ul>
+        <li><strong>BPH</strong> (most common in older men) — often a trigger: cold medication, constipation, UTI, recent surgery/anesthesia</li>
+        <li><strong>Medications</strong>: anticholinergics (OTC allergy/sleep, antihistamines, TCAs, antipsychotics), opioids, sympathomimetics (decongestants), alpha-2 agonists, muscle relaxants</li>
+        <li><strong>Neurogenic</strong>: cauda equina, spinal cord injury, MS, diabetes, stroke</li>
+        <li><strong>Post-operative</strong>: anesthesia, opioids, inability to void recumbent</li>
+        <li><strong>Urethral stricture</strong></li>
+        <li><strong>Prostate/bladder cancer</strong> causing obstruction</li>
+        <li><strong>Clot retention</strong>: after hematuria</li>
+        <li><strong>Fecal impaction</strong></li>
+        <li>Women: pelvic mass, prolapse (cystocele with kinking), post-operative</li>
+      </ul>
+
+      <h2>Management</h2>
+      <ul>
+        <li><strong>Bladder decompression with Foley</strong> — urgent. Use 16-18 Fr Coudé tip if BPH suspected (curve navigates enlarged prostate). Fill balloon only after confirming urine return.</li>
+        <li><strong>Suprapubic tube</strong> if urethral passage fails, stricture present, or urologist instructs</li>
+        <li><strong>Rapid full decompression is safe</strong> (per current evidence; old practice of clamping debunked)</li>
+        <li><strong>Labs</strong>: BMP (creatinine, potassium — rule out post-obstructive AKI, hyperkalemia)</li>
+        <li><strong>UA</strong> — infection workup</li>
+      </ul>
+
+      <h2>Post-Obstructive Diuresis</h2>
+      <ul>
+        <li>Definition: &gt;200 mL/hr urine output after decompression, for &gt;2 hours</li>
+        <li>Can cause volume depletion, hypokalemia, hyponatremia</li>
+        <li>Management: monitor strict I/Os, replace 50-75% of urine output with IV fluid (NS or 1/2 NS), check electrolytes q6h, admit if significant</li>
+      </ul>
+
+      <h2>After Decompression — Medical Management</h2>
+      <ul>
+        <li><strong>Tamsulosin 0.4 mg qhs</strong> (start immediately in men with BPH)</li>
+        <li><strong>5-ARI</strong> if prostate clearly enlarged</li>
+        <li><strong>Trial without catheter (TWOC)</strong> at 3-7 days; success rate ~40-50% on first attempt. Instruct to return if unable to void or escalating pain.</li>
+        <li>Catheter care education if going home with indwelling catheter</li>
+        <li>Follow-up with urology arranged before discharge</li>
+      </ul>
+
+      <div class="redflag"><strong>Red flags:</strong>
+        <ul style="margin:6px 0;">
+          <li>Saddle anesthesia, lower extremity weakness, recent back pain — rule out <strong>cauda equina syndrome</strong> (MRI emergent).</li>
+          <li>Hematuria with clots — clot retention; 3-way Foley and CBI, urgent consult.</li>
+          <li>Prior pelvic radiation, known stricture, prior urethral surgery — call urology before multiple catheter attempts.</li>
+          <li>AKI from obstruction — consider nephrology co-management.</li>
+        </ul>
+      </div>
+
+      <h2>Pearls</h2>
+      <ul>
+        <li>Don't force a catheter against resistance. Two failed attempts = call urology.</li>
+        <li>Women rarely have BPH-pattern retention — work up pelvic and neurologic causes more aggressively.</li>
+        <li>Measure and record the initial retention volume — informs chronicity and TWOC counseling.</li>
+      </ul>
+    `,
+    sources: [
+      { label: 'AUA: BPH Guideline (retention management)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/benign-prostatic-hyperplasia-(bph)-guideline' }
+    ]
+  },
+
+  {
+    id: 'vasectomy',
+    category: 'clinical',
+    title: 'Vasectomy: Counseling & Follow-Up',
+    tags: ['vasectomy', 'male', 'counseling', 'procedure'],
+    tldr: 'Outpatient procedure, ~99% effective AFTER confirmed azoospermia. Counsel on: permanence, ~3 months + 20 ejaculations to clearance, no STI protection, post-op semen analysis required. Use contraception until first SA shows azoospermia or rare non-motile sperm.',
+    body: `
+      <h2>Pre-Procedure Counseling</h2>
+      <ul>
+        <li><strong>Permanence</strong>: consider permanent. Reversal is possible (vasovasostomy) but expensive, variable success (~50-80% patency, lower pregnancy rate), and not always covered.</li>
+        <li><strong>Not immediate</strong>: sperm remain in distal vas for weeks; requires ~3 months AND ~20 ejaculations to clear</li>
+        <li><strong>No STI protection</strong></li>
+        <li><strong>Contraception required</strong> until azoospermia confirmed on semen analysis</li>
+        <li>No change in testosterone, libido, erectile function, or ejaculate volume (sperm is &lt;5% of volume)</li>
+        <li>Alternatives discussed: female tubal ligation, long-acting reversible contraception</li>
+        <li>Partner involvement in decision strongly encouraged</li>
+      </ul>
+
+      <h2>Procedure</h2>
+      <ul>
+        <li>Office-based, local anesthesia, ~15-30 minutes</li>
+        <li><strong>No-scalpel technique</strong> (preferred): puncture-based, less pain, fewer complications</li>
+        <li>Vas deferens is identified, divided, and occluded (cautery, fascial interposition, and/or clips)</li>
+      </ul>
+
+      <h2>Post-Op Instructions</h2>
+      <ul>
+        <li>Scrotal support, ice 20 min on/off for 24-48 h</li>
+        <li>NSAIDs for pain</li>
+        <li>Return to desk work in 1-3 days, heavier physical labor in ~1 week</li>
+        <li><strong>Avoid sex and ejaculation for 7 days</strong></li>
+        <li>Small amount of bruising, swelling is normal</li>
+      </ul>
+
+      <h2>Post-Vasectomy Semen Analysis (AUA)</h2>
+      <ul>
+        <li>First SA at <strong>8-16 weeks post-procedure</strong> (and/or after ~20 ejaculations)</li>
+        <li><strong>Goal</strong>: azoospermia, OR rare non-motile sperm (RNMS) at ≤100,000 sperm/mL</li>
+        <li>Until confirmed: <strong>continue contraception</strong></li>
+        <li>If motile sperm or &gt;100,000 non-motile on first SA: repeat in 4-6 weeks. Persistence = failed vasectomy — return to urology.</li>
+      </ul>
+
+      <h2>Complications</h2>
+      <ul>
+        <li><strong>Hematoma</strong> (~1-2%): rest, ice, usually self-resolves; large hematoma rarely requires drainage</li>
+        <li><strong>Infection</strong> (&lt;1%): antibiotics</li>
+        <li><strong>Chronic scrotal pain / post-vasectomy pain syndrome</strong> (~1-2% significant): multimodal treatment; counsel pre-procedure</li>
+        <li><strong>Sperm granuloma</strong>: painful nodule at surgical site from sperm leakage; usually self-limited</li>
+        <li><strong>Recanalization / failure</strong>: &lt;1%; identified on follow-up SA</li>
+      </ul>
+
+      <div class="redflag"><strong>Do not release from contraception</strong> until the confirming semen analysis result is in writing and reviewed with the patient. "It's been 3 months" is not enough.</div>
+    `,
+    sources: [
+      { label: 'AUA: Vasectomy Guideline (2012, amended 2015)', url: 'https://www.auanet.org/guidelines-and-quality/guidelines/vasectomy-guideline' }
+    ]
+  }
+];
+
+/* ============================================================
+   DATA: Flowcharts (nested decision trees)
+   Each node has either {question, branches: [{label, next}]} or {outcome}
+   ============================================================ */
+const FLOWCHARTS = [
+  {
+    id: 'fc-microhematuria',
+    title: 'Microhematuria Risk-Stratified Workup (AUA 2020)',
+    cardRef: 'microhematuria',
+    root: {
+      question: 'Confirmed microhematuria? (≥3 RBC/HPF on a single properly-collected UA)',
+      branches: [
+        { label: 'No', next: { outcome: 'Not microhematuria. Consider benign causes (contamination, exercise, menses, recent instrumentation). Repeat UA if clinical suspicion persists.' } },
+        {
+          label: 'Yes',
+          next: {
+            question: 'Any dysmorphic RBCs, RBC casts, proteinuria, or elevated creatinine?',
+            branches: [
+              { label: 'Yes', next: { outcome: 'CONCURRENT nephrology referral for glomerular workup. Continue with urologic workup below based on risk category.' } },
+              {
+                label: 'No',
+                next: {
+                  question: 'Risk category? (based on age, smoking, RBC count, exposures)',
+                  branches: [
+                    { label: 'LOW: age <40, never smoker, no risk factors, 3-10 RBC/HPF', next: { outcome: 'Shared decision: (A) repeat UA in 6 months, OR (B) cystoscopy + renal ultrasound.' } },
+                    { label: 'INTERMEDIATE: age 40-59, <30 pack-years, 11-25 RBC/HPF, or risk factors', next: { outcome: 'Cystoscopy + renal ultrasound.' } },
+                    { label: 'HIGH: age ≥60, >30 pack-years, >25 RBC/HPF, or history of gross hematuria', next: { outcome: 'Cystoscopy + CT urogram (or MR urogram if iodinated contrast contraindicated).' } }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    id: 'fc-acute-scrotum',
+    title: 'Acute Scrotum Pathway',
+    cardRef: 'torsion',
+    root: {
+      question: 'Age and presentation?',
+      branches: [
+        {
+          label: 'Young male (especially teen), sudden severe pain, high-riding testis, absent cremasteric reflex',
+          next: { outcome: 'TESTICULAR TORSION until proven otherwise. Call urology EMERGENTLY. Scrotal US with Doppler does not delay surgery. Consider manual detorsion (medial to lateral) en route. Time is testis.' }
+        },
+        {
+          label: 'Older, gradual onset, fever, tender epididymis',
+          next: {
+            question: 'Sexually active under 35?',
+            branches: [
+              { label: 'Yes', next: { outcome: 'Likely EPIDIDYMITIS. Empiric coverage for GC/chlamydia: ceftriaxone 500 mg IM x 1 + doxycycline 100 mg BID x 10 days. Test. UA + culture. Partner treatment.' } },
+              { label: 'No (older or lower STI risk)', next: { outcome: 'Likely EPIDIDYMITIS from enteric/urinary source. Fluoroquinolone x 10-14 days (cipro 500 BID or levofloxacin). UA + culture. Evaluate for underlying BPH or voiding dysfunction.' } }
+            ]
+          }
+        },
+        {
+          label: 'Young boy, focal upper-pole tenderness, "blue dot sign"',
+          next: { outcome: 'Likely TORSION OF APPENDIX TESTIS. Confirm with US. Conservative management: rest, NSAIDs; usually self-resolves in 5-7 days. If diagnosis uncertain, exploration is safe.' }
+        },
+        {
+          label: 'Trauma, severe pain, concern for rupture',
+          next: { outcome: 'Scrotal US urgently. Surgical exploration if rupture/hematoma/testicular injury. Tetanus update as needed.' }
+        },
+        {
+          label: 'Systemic illness, necrotic skin, crepitus, sepsis',
+          next: { outcome: 'FOURNIER GANGRENE — surgical emergency. Broad-spectrum IV antibiotics, emergent surgical debridement. Call urology and general surgery immediately.' }
+        }
+      ]
+    }
+  },
+
+  {
+    id: 'fc-elevated-psa',
+    title: 'Elevated PSA — Next Steps',
+    cardRef: 'psa',
+    root: {
+      question: 'First confirmed PSA elevation? (Have you repeated it?)',
+      branches: [
+        { label: 'No — this is the first abnormal reading', next: { outcome: 'Repeat PSA in 4-6 weeks. Exclude transient causes: recent UTI, acute prostatitis, ejaculation in prior 48 hours, recent DRE/instrumentation, vigorous cycling.' } },
+        {
+          label: 'Yes — elevation confirmed on repeat',
+          next: {
+            question: 'Is the patient on a 5-alpha reductase inhibitor (finasteride, dutasteride)?',
+            branches: [
+              { label: 'Yes', next: { outcome: 'DOUBLE the measured PSA to interpret for cancer screening. 5-ARIs halve PSA. Re-assess risk based on corrected value.' } },
+              {
+                label: 'No',
+                next: {
+                  question: 'Any symptoms or findings of acute prostatitis/UTI?',
+                  branches: [
+                    { label: 'Yes', next: { outcome: 'Treat infection fully. Recheck PSA 6-8 weeks after completion of treatment. Do not biopsy during or soon after acute inflammation.' } },
+                    {
+                      label: 'No — persistently elevated PSA',
+                      next: {
+                        question: 'Has the patient had a multiparametric MRI prostate?',
+                        branches: [
+                          { label: 'No', next: { outcome: 'Order multiparametric MRI prostate. Consider PSA density (PSA ÷ prostate volume). Also consider 4Kscore, PHI, or SelectMDx as biomarker refinement before biopsy.' } },
+                          { label: 'Yes — PI-RADS 1-2', next: { outcome: 'Low suspicion on MRI. Shared decision: monitor with interval PSA ± repeat MRI vs proceed to systematic biopsy if other risk factors (PSA density >0.15, strong family history, BRCA).' } },
+                          { label: 'Yes — PI-RADS 3', next: { outcome: 'Equivocal. Use PSA density, patient risk factors, and shared decision to decide biopsy. Many proceed to targeted + systematic biopsy.' } },
+                          { label: 'Yes — PI-RADS 4-5', next: { outcome: 'Proceed to MRI-targeted + systematic prostate biopsy. Counsel on bleeding, infection (~1-2% transrectal; lower transperineal), retention, hematospermia for weeks.' } }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    id: 'fc-bph-stepped',
+    title: 'BPH Stepped Therapy',
+    cardRef: 'bph',
+    root: {
+      question: 'IPSS severity?',
+      branches: [
+        { label: 'Mild (0-7)', next: { outcome: 'Watchful waiting + lifestyle. Reduce evening fluids, treat constipation, avoid triggering meds (decongestants, anticholinergics). Reassess annually.' } },
+        {
+          label: 'Moderate to severe (8+)',
+          next: {
+            question: 'Estimated prostate size (DRE or imaging)?',
+            branches: [
+              {
+                label: 'Small-moderate (<30-40 cc)',
+                next: {
+                  question: 'Bothersome storage symptoms (urgency, nocturia) predominant?',
+                  branches: [
+                    { label: 'No — primarily obstructive', next: { outcome: 'Alpha blocker: tamsulosin 0.4 mg qhs (first line). Alternatives: silodosin, alfuzosin, doxazosin. Reassess 4-6 weeks.' } },
+                    { label: 'Yes — mixed or storage-predominant', next: { outcome: 'Consider adding beta-3 agonist (mirabegron 25-50 mg) or low-dose antimuscarinic. Ensure no significant retention (check PVR first).' } }
+                  ]
+                }
+              },
+              {
+                label: 'Enlarged (>30-40 cc)',
+                next: { outcome: 'Combination therapy: alpha blocker + 5-ARI (finasteride 5 mg or dutasteride 0.5 mg). Counsel: 5-ARI effect takes 3-6 months; halves PSA; possible sexual side effects. Reassess 6-12 months.' }
+              }
+            ]
+          }
+        },
+        {
+          label: 'Any severity WITH complications',
+          next: { outcome: 'Refer to urology. Complications: acute retention (especially recurrent), renal insufficiency from obstruction, bladder stones, recurrent UTIs, recurrent gross hematuria attributable to BPH, or refractory symptoms despite adequate medical therapy. Surgical options (TURP, UroLift, Rezum, GreenLight, HoLEP, Aquablation) chosen by gland size and patient factors.' }
+        }
+      ]
+    }
+  },
+
+  {
+    id: 'fc-stones',
+    title: 'Kidney Stone — Size-Based Management',
+    cardRef: 'stones',
+    root: {
+      question: 'Signs of infected obstruction? (fever, leukocytosis, positive UA/culture with hydronephrosis)',
+      branches: [
+        { label: 'YES', next: { outcome: 'URGENT — call urology immediately. Needs decompression (percutaneous nephrostomy or ureteral stent) PLUS broad-spectrum antibiotics. This is a urologic emergency; delay risks sepsis and nephron loss.' } },
+        {
+          label: 'No — stable and uninfected',
+          next: {
+            question: 'Patient status?',
+            branches: [
+              { label: 'Solitary kidney, bilateral stones, or acute kidney injury', next: { outcome: 'Urgent urology consult for intervention. Cannot observe.' } },
+              { label: 'Intractable pain or vomiting despite optimal medical therapy', next: { outcome: 'Urology consult for intervention — usually ureteroscopy with stent or PCN.' } },
+              {
+                label: 'Stable, tolerating PO, adequate analgesia',
+                next: {
+                  question: 'Stone size?',
+                  branches: [
+                    { label: '<5 mm', next: { outcome: '~80-90% pass spontaneously. Hydration, NSAID analgesia (ketorolac for acute, PO for home). Strain urine, follow-up 1-2 weeks. Alpha blocker optional.' } },
+                    { label: '5-10 mm', next: { outcome: '~50% pass spontaneously. Medical expulsive therapy: tamsulosin 0.4 mg daily + NSAIDs. Up to 4-6 weeks of observation. If no progression, urology referral for URS/ESWL.' } },
+                    { label: '>10 mm', next: { outcome: 'Unlikely to pass. Urology referral for definitive management: ureteroscopy (most common), ESWL (select locations), or PCNL for large renal stones.' } }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    id: 'fc-retention',
+    title: 'Acute Urinary Retention Pathway',
+    cardRef: 'retention',
+    root: {
+      question: 'Confirmed retention on bladder scan? (usually >400 mL with suprapubic pain/distention)',
+      branches: [
+        { label: 'No', next: { outcome: 'Not retention. Consider other causes of suprapubic discomfort: UTI, pelvic pathology, abdominal cause.' } },
+        {
+          label: 'Yes',
+          next: {
+            question: 'Neurologic signs? (saddle anesthesia, lower extremity weakness, recent back pain, bowel changes)',
+            branches: [
+              { label: 'Yes', next: { outcome: 'Cauda equina suspicion — EMERGENT spinal MRI. Decompress bladder (Foley), neurosurgery consult, do NOT delay.' } },
+              {
+                label: 'No',
+                next: {
+                  question: 'Clot retention / visible hematuria?',
+                  branches: [
+                    { label: 'Yes', next: { outcome: 'Three-way Foley, manual irrigation to evacuate clots, continuous bladder irrigation. Urgent urology consult for cystoscopy once cleared.' } },
+                    {
+                      label: 'No — uncomplicated retention',
+                      next: {
+                        question: 'Place Foley (16-18 Fr, Coudé if BPH suspected). Success?',
+                        branches: [
+                          { label: 'Catheter passed; good output', next: { outcome: 'Start tamsulosin 0.4 mg. Check BMP (AKI?). Treat any UTI. Monitor for post-obstructive diuresis (>200 mL/hr — replace 50-75% with IV fluid, monitor electrolytes). Plan TWOC at 3-7 days. Urology follow-up before/around TWOC.' } },
+                          { label: 'Unable to pass after 2 attempts or known stricture', next: { outcome: 'STOP. Call urology. May need: Coudé tip, different size, suprapubic tube, cystoscopic placement, or urgent intervention. Do not traumatize urethra with repeated forced attempts.' } }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+];
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+const LS = {
+  get: (k, dflt) => { try { const v = localStorage.getItem(k); return v === null ? dflt : JSON.parse(v); } catch { return dflt; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del: (k) => { try { localStorage.removeItem(k); } catch {} }
+};
+
+const state = {
+  view: 'reference',
+  search: '',
+  category: 'all',
+  selectedCard: null,
+  selectedFlowchart: null,
+  flowchartPath: [],
+  apiKey: LS.get('apiKey', ''),
+  model: LS.get('model', 'claude-opus-4-7'),
+  effort: LS.get('effort', 'high'),
+  disclaimerAccepted: LS.get('disclaimerAccepted', false),
+  gaps: LS.get('gaps', []),
+  showSettings: false,
+  showGapAdd: false,
+  vignette: '',
+  claudeResponse: null,
+  claudeLoading: false,
+  claudeError: null,
+  claudeUsage: null
+};
+
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'clinical', label: 'Clinical' }
+];
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function filterCards() {
+  const q = state.search.toLowerCase().trim();
+  return CARDS.filter((c) => {
+    if (state.category !== 'all' && c.category !== state.category) return false;
+    if (!q) return true;
+    return (
+      c.title.toLowerCase().includes(q) ||
+      c.tags.some((t) => t.toLowerCase().includes(q)) ||
+      c.tldr.toLowerCase().includes(q) ||
+      (c.body || '').toLowerCase().includes(q)
+    );
+  });
+}
+
+function cardById(id) { return CARDS.find((c) => c.id === id); }
+function flowchartById(id) { return FLOWCHARTS.find((f) => f.id === id); }
+
+function save(key) { LS.set(key, state[key]); }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const app = document.getElementById('app');
+
+function render() {
+  if (!state.disclaimerAccepted) {
+    renderDisclaimer();
+    return;
+  }
+  const parts = [];
+  parts.push(renderHeader());
+  parts.push(renderTabs());
+  parts.push('<main>');
+  if (state.view === 'reference') parts.push(renderReferenceView());
+  else if (state.view === 'flowcharts') parts.push(renderFlowchartsView());
+  else if (state.view === 'claude') parts.push(renderClaudeView());
+  else if (state.view === 'gaps') parts.push(renderGapsView());
+  parts.push('</main>');
+  if (state.showSettings) parts.push(renderSettings());
+  if (state.showGapAdd) parts.push(renderGapAdd());
+  app.innerHTML = parts.join('');
+  wireEvents();
+}
+
+function renderDisclaimer() {
+  app.innerHTML = `
+    <main style="padding-top:40px;">
+      <div class="disclaimer">
+        <h2>Personal Study Aid — Not Clinical Decision Support</h2>
+        <p>This app is a reference for a single clinician's study and bedside review. It is <strong>not</strong> a clinical decision support tool, not FDA-reviewed, and not a substitute for clinical judgment, attending consultation, or the current AUA/EAU guidelines.</p>
+        <p>Content reflects guideline summaries compiled from training data with a cutoff date. Guidelines update. <strong>Verify every recommendation against the linked primary source before acting on it.</strong></p>
+        <p>The "Ask Claude" feature sends your question and the reference content to Anthropic's API using your own API key. It is a reasoning partner, not a diagnostician. Its output must also be verified against the cited cards and source guidelines.</p>
+        <p>By continuing, you acknowledge these limitations and accept responsibility for your clinical decisions.</p>
+        <button class="ack-btn" data-act="accept-disclaimer">I understand — continue</button>
+      </div>
+    </main>
+  `;
+  document.querySelector('[data-act="accept-disclaimer"]').addEventListener('click', () => {
+    state.disclaimerAccepted = true;
+    save('disclaimerAccepted');
+    render();
+  });
+}
+
+function renderHeader() {
+  return `
+    <header class="top">
+      <div>
+        <div class="brand">Uro Ref</div>
+        <div class="brand-sub">Study aid · verify before use</div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" data-act="open-settings" title="Settings">⚙</button>
+      </div>
+    </header>
+  `;
+}
+
+function renderTabs() {
+  const tab = (id, label) => `<button class="${state.view === id ? 'active' : ''}" data-tab="${id}">${label}</button>`;
+  return `
+    <nav class="tabs">
+      ${tab('reference', 'Reference')}
+      ${tab('flowcharts', 'Flows')}
+      ${tab('claude', 'Ask Claude')}
+      ${tab('gaps', 'Gaps')}
+    </nav>
+  `;
+}
+
+function renderReferenceView() {
+  if (state.selectedCard) return renderCardDetail(state.selectedCard);
+  const filtered = filterCards();
+  return `
+    <div class="search-bar">
+      <input type="search" placeholder="Search cards, tags, content..." value="${esc(state.search)}" data-field="search" autocomplete="off">
+    </div>
+    <div class="chips">
+      ${categories.map((c) => `<button class="chip ${state.category === c.id ? 'active' : ''}" data-cat="${c.id}">${c.label}</button>`).join('')}
+    </div>
+    <div class="card-grid">
+      ${filtered.length === 0 ? '<div class="empty">No cards match your search.</div>' : filtered.map(cardItem).join('')}
+    </div>
+  `;
+}
+
+function cardItem(c) {
+  return `
+    <button class="card-item" data-card="${c.id}">
+      <h3>${esc(c.title)}</h3>
+      <p>${esc(c.tldr)}</p>
+      <div class="card-tags">${c.tags.slice(0, 3).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+    </button>
+  `;
+}
+
+function renderCardDetail(id) {
+  const c = cardById(id);
+  if (!c) return '<div class="empty">Card not found.</div>';
+  return `
+    <button class="back-btn" data-act="back-cards">← Back to cards</button>
+    <div class="card-detail">
+      <h1>${esc(c.title)}</h1>
+      <div class="tldr">${esc(c.tldr)}</div>
+      ${c.body}
+      <div class="sources">
+        <h3>Sources (verify before clinical use)</h3>
+        ${c.sources.map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)} →</a>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderFlowchartsView() {
+  if (state.selectedFlowchart) return renderFlowchartDetail(state.selectedFlowchart);
+  return `
+    <div class="card-grid">
+      ${FLOWCHARTS.map((f) => `
+        <button class="card-item" data-flow="${f.id}">
+          <h3>${esc(f.title)}</h3>
+          <p>Decision tree. Tap to work through the pathway.</p>
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderFlowchartDetail(id) {
+  const fc = flowchartById(id);
+  if (!fc) return '<div class="empty">Flowchart not found.</div>';
+  let node = fc.root;
+  for (const step of state.flowchartPath) node = node.branches[step].next;
+  const breadcrumbSteps = ['<button data-fc-reset>Start</button>'];
+  let walker = fc.root;
+  for (let i = 0; i < state.flowchartPath.length; i++) {
+    const label = walker.branches[state.flowchartPath[i]].label;
+    breadcrumbSteps.push(`<button data-fc-back="${i}">${esc(label)}</button>`);
+    walker = walker.branches[state.flowchartPath[i]].next;
+  }
+  const breadcrumb = `<div class="breadcrumb">${breadcrumbSteps.join(' › ')}</div>`;
+
+  const relatedCard = fc.cardRef ? cardById(fc.cardRef) : null;
+  const relatedLink = relatedCard ? `<div style="margin-top:14px;"><a href="#" data-card="${relatedCard.id}">See related card: ${esc(relatedCard.title)} →</a></div>` : '';
+
+  return `
+    <button class="back-btn" data-act="back-flows">← Back to flowcharts</button>
+    <h1 style="font-family:var(--serif);color:var(--accent);font-size:22px;margin:0 0 4px;">${esc(fc.title)}</h1>
+    ${breadcrumb}
+    ${renderFlowchartNode(node)}
+    ${relatedLink}
+  `;
+}
+
+function renderFlowchartNode(node) {
+  if (node.outcome) {
+    return `
+      <div class="flowchart-outcome">
+        <strong>Action:</strong> ${esc(node.outcome)}
+      </div>
+    `;
+  }
+  return `
+    <div class="flowchart-node">
+      <div class="flowchart-question">${esc(node.question)}</div>
+      <div class="flowchart-branches">
+        ${node.branches.map((b, i) => `<button class="flowchart-branch-btn" data-branch="${i}">${esc(b.label)}</button>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderClaudeView() {
+  const keyMissing = !state.apiKey;
+  return `
+    <div class="claude-panel">
+      <h2 style="font-family:var(--serif);color:var(--accent);margin:0 0 6px;font-size:20px;">Ask Claude</h2>
+      <p style="color:var(--text-dim);font-size:14px;margin:0 0 14px;">Paste a vignette or ask a urology reasoning question. Claude will give a structured answer using only this app's reference cards, with citations. Verify every recommendation against the cited card and its source guideline.</p>
+      ${keyMissing ? `<div class="claude-error" style="margin-top:0;margin-bottom:12px;">No API key set. Open settings (top right) to add your Anthropic API key.</div>` : ''}
+      <textarea placeholder="e.g., 65 y/o M with IPSS 18, PSA 2.8, PVR 60 mL, on tamsulosin with suboptimal response. Next steps?" data-field="vignette" ${keyMissing ? 'disabled' : ''}>${esc(state.vignette)}</textarea>
+      <button class="claude-submit" data-act="ask-claude" ${keyMissing || state.claudeLoading ? 'disabled' : ''}>${state.claudeLoading ? 'Thinking…' : 'Ask'}</button>
+      <div class="claude-hint">
+        Model: <strong>${state.model === 'claude-opus-4-7' ? 'Opus 4.7 (strongest)' : 'Sonnet 4.6 (fast, cheap)'}</strong> · Effort: <strong>${state.effort}</strong>.
+        Change in settings. Your API key is stored only in this browser's localStorage.
+      </div>
+      ${state.claudeError ? `<div class="claude-error">${esc(state.claudeError)}</div>` : ''}
+      ${state.claudeLoading ? `<div class="claude-loading">Claude is reasoning through your case…</div>` : ''}
+      ${state.claudeResponse ? renderClaudeResponse() : ''}
+    </div>
+  `;
+}
+
+function renderClaudeResponse() {
+  const md = renderMarkdown(state.claudeResponse);
+  const usage = state.claudeUsage;
+  const usageLine = usage ? `<div style="font-size:11px;color:var(--text-faint);margin-top:10px;">Tokens — input: ${usage.input_tokens} · output: ${usage.output_tokens} · cache read: ${usage.cache_read_input_tokens || 0} · cache write: ${usage.cache_creation_input_tokens || 0}</div>` : '';
+  return `
+    <div class="claude-response">
+      ${md}
+      <div class="claude-footer">Verify every recommendation against the cited card and the source AUA/EAU guideline before clinical use. Claude is a reasoning partner, not a diagnostician.</div>
+      ${usageLine}
+    </div>
+  `;
+}
+
+/* Light-weight markdown for Claude's response. Supports:
+   ## headings, - bullets, 1. ordered lists, **bold**, *italic*, [card:id] citations */
+function renderMarkdown(text) {
+  const lines = text.split('\n');
+  const out = [];
+  let inUl = false, inOl = false;
+  const flushLists = () => {
+    if (inUl) { out.push('</ul>'); inUl = false; }
+    if (inOl) { out.push('</ol>'); inOl = false; }
+  };
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    if (!line.trim()) { flushLists(); continue; }
+    if (/^## /.test(line)) { flushLists(); out.push('<h2>' + inlineMd(line.replace(/^## /, '')) + '</h2>'); continue; }
+    if (/^# /.test(line)) { flushLists(); out.push('<h2>' + inlineMd(line.replace(/^# /, '')) + '</h2>'); continue; }
+    const ulMatch = line.match(/^\s*-\s+(.*)$/);
+    if (ulMatch) {
+      if (!inUl) { flushLists(); out.push('<ul>'); inUl = true; }
+      out.push('<li>' + inlineMd(ulMatch[1]) + '</li>');
+      continue;
+    }
+    const olMatch = line.match(/^\s*\d+\.\s+(.*)$/);
+    if (olMatch) {
+      if (!inOl) { flushLists(); out.push('<ol>'); inOl = true; }
+      out.push('<li>' + inlineMd(olMatch[1]) + '</li>');
+      continue;
+    }
+    flushLists();
+    out.push('<p>' + inlineMd(line) + '</p>');
+  }
+  flushLists();
+  return out.join('');
+}
+
+function inlineMd(s) {
+  let out = esc(s);
+  out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  out = out.replace(/\[card:([a-z0-9-]+)\]/gi, (m, id) => {
+    const c = cardById(id);
+    if (!c) return '<span class="cite" style="opacity:.6;">[card:' + esc(id) + ']</span>';
+    return '<span class="cite" data-cite="' + esc(id) + '" title="' + esc(c.title) + '">[' + esc(c.title) + ']</span>';
+  });
+  return out;
+}
+
+function renderGapsView() {
+  return `
+    <div>
+      <h2 style="font-family:var(--serif);color:var(--accent);margin:0 0 6px;font-size:20px;">Knowledge Gaps</h2>
+      <p style="color:var(--text-dim);font-size:14px;margin:0 0 14px;">One-tap log of things you encountered and want to review. Turns real clinical encounters into v2 content.</p>
+      <button class="claude-submit" style="width:auto;padding:10px 16px;" data-act="add-gap">+ Log a gap</button>
+      <div style="margin-top:16px;">
+        ${state.gaps.length === 0 ? '<div class="empty">No gaps logged yet. Tap "Log a gap" when you hit something at clinic you want to review.</div>' :
+          state.gaps.slice().reverse().map((g, i) => {
+            const realIndex = state.gaps.length - 1 - i;
+            return `
+              <div class="gap-item">
+                <div style="flex:1;">
+                  <div class="gap-text">${esc(g.text)}</div>
+                  <div class="gap-date">${esc(new Date(g.timestamp).toLocaleString())}</div>
+                </div>
+                <button class="gap-del" data-del-gap="${realIndex}" title="Delete">×</button>
+              </div>
+            `;
+          }).join('')
+        }
+      </div>
+      ${state.gaps.length > 0 ? `<button class="back-btn" style="margin-top:20px;" data-act="export-gaps">Export gaps as text →</button>` : ''}
+    </div>
+  `;
+}
+
+function renderSettings() {
+  return `
+    <div class="modal-backdrop" data-act="close-modal">
+      <div class="modal" data-stop>
+        <button class="modal-close" data-act="close-modal">×</button>
+        <h2>Settings</h2>
+
+        <label>Anthropic API Key</label>
+        <input type="password" value="${esc(state.apiKey)}" data-field="apiKey" placeholder="sk-ant-..." autocomplete="off">
+        <div class="hint">Stored in this browser's localStorage only. Never uploaded to any server except api.anthropic.com when you ask Claude. Get a key at console.anthropic.com.</div>
+
+        <label>Model</label>
+        <div class="model-toggle">
+          <button class="model-opt ${state.model === 'claude-opus-4-7' ? 'active' : ''}" data-model="claude-opus-4-7">Opus 4.7<br><span style="font-size:11px;color:var(--text-faint);">strongest</span></button>
+          <button class="model-opt ${state.model === 'claude-sonnet-4-6' ? 'active' : ''}" data-model="claude-sonnet-4-6">Sonnet 4.6<br><span style="font-size:11px;color:var(--text-faint);">fast · cheap</span></button>
+        </div>
+
+        <label>Reasoning effort</label>
+        <div class="model-toggle" style="grid-template-columns:repeat(3,1fr);">
+          <button class="model-opt ${state.effort === 'medium' ? 'active' : ''}" data-effort="medium">Medium</button>
+          <button class="model-opt ${state.effort === 'high' ? 'active' : ''}" data-effort="high">High</button>
+          <button class="model-opt ${state.effort === 'max' ? 'active' : ''}" data-effort="max">Max</button>
+        </div>
+        <div class="hint">"Max" is Opus-only and slower/more expensive. Good for hard cases.</div>
+
+        <button class="save-btn" data-act="save-settings">Save</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderGapAdd() {
+  return `
+    <div class="modal-backdrop" data-act="close-modal">
+      <div class="modal" data-stop>
+        <button class="modal-close" data-act="close-modal">×</button>
+        <h2>Log a Gap</h2>
+        <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px;">What did you encounter today that you want to review later?</p>
+        <textarea data-field="newGap" placeholder="e.g., BCG instillation protocol for NMIBC — didn't know the schedule" autoFocus></textarea>
+        <button class="save-btn" data-act="save-gap">Save Gap</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+function wireEvents() {
+  // Tabs
+  document.querySelectorAll('[data-tab]').forEach((el) => {
+    el.addEventListener('click', () => {
+      state.view = el.dataset.tab;
+      state.selectedCard = null;
+      state.selectedFlowchart = null;
+      state.flowchartPath = [];
+      render();
+    });
+  });
+  // Card select
+  document.querySelectorAll('[data-card]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = el.dataset.card;
+      state.selectedCard = id;
+      state.view = 'reference';
+      state.selectedFlowchart = null;
+      render();
+      window.scrollTo(0, 0);
+    });
+  });
+  // Back to cards
+  document.querySelectorAll('[data-act="back-cards"]').forEach((el) => {
+    el.addEventListener('click', () => { state.selectedCard = null; render(); });
+  });
+  // Search
+  const searchEl = document.querySelector('[data-field="search"]');
+  if (searchEl) {
+    searchEl.addEventListener('input', (e) => {
+      state.search = e.target.value;
+      const list = document.querySelector('.card-grid');
+      if (list) list.innerHTML = filterCards().map(cardItem).join('') || '<div class="empty">No cards match your search.</div>';
+      document.querySelectorAll('[data-card]').forEach((el) => {
+        el.addEventListener('click', () => {
+          state.selectedCard = el.dataset.card;
+          render();
+          window.scrollTo(0, 0);
+        });
+      });
+    });
+  }
+  // Category chips
+  document.querySelectorAll('[data-cat]').forEach((el) => {
+    el.addEventListener('click', () => { state.category = el.dataset.cat; render(); });
+  });
+  // Flowchart select
+  document.querySelectorAll('[data-flow]').forEach((el) => {
+    el.addEventListener('click', () => {
+      state.selectedFlowchart = el.dataset.flow;
+      state.flowchartPath = [];
+      render();
+      window.scrollTo(0, 0);
+    });
+  });
+  document.querySelectorAll('[data-act="back-flows"]').forEach((el) => {
+    el.addEventListener('click', () => { state.selectedFlowchart = null; state.flowchartPath = []; render(); });
+  });
+  // Flowchart branches
+  document.querySelectorAll('[data-branch]').forEach((el) => {
+    el.addEventListener('click', () => { state.flowchartPath.push(parseInt(el.dataset.branch, 10)); render(); });
+  });
+  document.querySelectorAll('[data-fc-reset]').forEach((el) => {
+    el.addEventListener('click', () => { state.flowchartPath = []; render(); });
+  });
+  document.querySelectorAll('[data-fc-back]').forEach((el) => {
+    el.addEventListener('click', () => { state.flowchartPath = state.flowchartPath.slice(0, parseInt(el.dataset.fcBack, 10) + 1); render(); });
+  });
+  // Settings open
+  document.querySelectorAll('[data-act="open-settings"]').forEach((el) => {
+    el.addEventListener('click', () => { state.showSettings = true; render(); });
+  });
+  // Modals
+  document.querySelectorAll('[data-act="close-modal"]').forEach((el) => {
+    el.addEventListener('click', () => { state.showSettings = false; state.showGapAdd = false; render(); });
+  });
+  document.querySelectorAll('[data-stop]').forEach((el) => {
+    el.addEventListener('click', (e) => e.stopPropagation());
+  });
+  // API key field
+  const keyEl = document.querySelector('[data-field="apiKey"]');
+  if (keyEl) keyEl.addEventListener('input', (e) => { state.apiKey = e.target.value.trim(); });
+  // Model/effort select
+  document.querySelectorAll('[data-model]').forEach((el) => {
+    el.addEventListener('click', () => { state.model = el.dataset.model; render(); });
+  });
+  document.querySelectorAll('[data-effort]').forEach((el) => {
+    el.addEventListener('click', () => { state.effort = el.dataset.effort; render(); });
+  });
+  // Save settings
+  const saveBtn = document.querySelector('[data-act="save-settings"]');
+  if (saveBtn) saveBtn.addEventListener('click', () => {
+    save('apiKey'); save('model'); save('effort');
+    state.showSettings = false;
+    render();
+  });
+  // Ask Claude
+  const vigEl = document.querySelector('[data-field="vignette"]');
+  if (vigEl) vigEl.addEventListener('input', (e) => { state.vignette = e.target.value; });
+  const askBtn = document.querySelector('[data-act="ask-claude"]');
+  if (askBtn) askBtn.addEventListener('click', askClaude);
+  // Claude citation clicks
+  document.querySelectorAll('[data-cite]').forEach((el) => {
+    el.addEventListener('click', () => {
+      state.view = 'reference';
+      state.selectedCard = el.dataset.cite;
+      render();
+      window.scrollTo(0, 0);
+    });
+  });
+  // Gaps
+  const addGapBtn = document.querySelector('[data-act="add-gap"]');
+  if (addGapBtn) addGapBtn.addEventListener('click', () => { state.showGapAdd = true; render(); });
+  const newGapEl = document.querySelector('[data-field="newGap"]');
+  if (newGapEl) setTimeout(() => newGapEl.focus(), 50);
+  const saveGapBtn = document.querySelector('[data-act="save-gap"]');
+  if (saveGapBtn) saveGapBtn.addEventListener('click', () => {
+    const text = (newGapEl ? newGapEl.value : '').trim();
+    if (!text) { state.showGapAdd = false; render(); return; }
+    state.gaps.push({ text, timestamp: Date.now() });
+    save('gaps');
+    state.showGapAdd = false;
+    render();
+  });
+  document.querySelectorAll('[data-del-gap]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const i = parseInt(el.dataset.delGap, 10);
+      state.gaps.splice(i, 1);
+      save('gaps');
+      render();
+    });
+  });
+  const exportBtn = document.querySelector('[data-act="export-gaps"]');
+  if (exportBtn) exportBtn.addEventListener('click', () => {
+    const lines = state.gaps.map((g) => `[${new Date(g.timestamp).toLocaleString()}] ${g.text}`).join('\n');
+    const blob = new Blob([lines], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'uro-ref-gaps.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+/* ============================================================
+   SYSTEM PROMPT for Claude (cached across requests)
+   Contains all card data + flowchart data + instructions.
+   ============================================================ */
+function buildSystemPrompt() {
+  const cardsJson = JSON.stringify(CARDS.map((c) => ({
+    id: c.id, title: c.title, tldr: c.tldr,
+    // strip HTML from body for token efficiency but keep structure
+    body: c.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    sources: c.sources.map((s) => s.label)
+  })), null, 2);
+  const flowchartsJson = JSON.stringify(FLOWCHARTS.map((f) => ({ id: f.id, title: f.title, cardRef: f.cardRef })), null, 2);
+
+  return `You are a clinical reasoning partner for a new urology nurse practitioner. Your role is to help her structure her own clinical reasoning using ONLY the reference cards provided below. You are NOT a diagnostician. You are NOT clinical decision support. You are a study and reasoning aid.
+
+CRITICAL SAFETY RULES:
+- Every clinical recommendation must cite a card from the reference set using the format [card:ID] (lowercase ID). Example: "Order mpMRI prostate [card:psa]."
+- If the vignette describes something outside the scope of your cards, say so explicitly — do not extrapolate confidently.
+- Never claim to make a diagnosis. Frame everything as "consider", "workup", "differential includes", "red flags to rule out".
+- Always encourage verification against AUA/EAU guidelines and attending input.
+- If a red flag is present (torsion, obstructed infected kidney, cauda equina, Fournier's), flag it prominently at the top of your response.
+
+OUTPUT FORMAT — use this markdown structure exactly:
+
+## Summary
+(1-2 sentence framing of what this presentation most likely represents, with citation)
+
+## Differential (ranked)
+1. Most likely — brief reasoning [card:id]
+2. Also consider — brief reasoning [card:id]
+3. Less likely but don't miss — brief reasoning [card:id]
+
+## Suggested workup
+- Specific test or step — rationale [card:id]
+- ...
+
+## Red flags to rule out
+- Finding → what it would change [card:id]
+- ...
+
+## What this is NOT
+One sentence on what the reasoning does NOT cover or presumes.
+
+## Verify
+One line reminding the NP to check the cited cards and AUA source before acting.
+
+REFERENCE CARDS:
+${cardsJson}
+
+RELATED FLOWCHARTS (the NP can open these in the app for stepwise decision trees):
+${flowchartsJson}`;
+}
+
+/* ============================================================
+   CLAUDE API CALL (direct from browser)
+   ============================================================ */
+async function askClaude() {
+  if (!state.vignette.trim()) return;
+  if (!state.apiKey) { state.claudeError = 'No API key. Open settings to add one.'; render(); return; }
+
+  state.claudeLoading = true;
+  state.claudeError = null;
+  state.claudeResponse = null;
+  state.claudeUsage = null;
+  render();
+
+  // `max` effort is Opus-only; downgrade to high for Sonnet to avoid a 400.
+  const effort = (state.model !== 'claude-opus-4-7' && state.effort === 'max') ? 'high' : state.effort;
+
+  const body = {
+    model: state.model,
+    max_tokens: 2000,
+    system: [
+      {
+        type: 'text',
+        text: buildSystemPrompt(),
+        cache_control: { type: 'ephemeral' }
+      }
+    ],
+    thinking: { type: 'adaptive' },
+    output_config: { effort },
+    messages: [
+      { role: 'user', content: state.vignette.trim() }
+    ]
+  };
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': state.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+      let errMsg = 'HTTP ' + resp.status;
+      try {
+        const errJson = await resp.json();
+        errMsg = errJson.error ? (errJson.error.message || JSON.stringify(errJson.error)) : errMsg;
+      } catch {}
+      throw new Error(errMsg);
+    }
+
+    const data = await resp.json();
+    // Extract text from response.content (which may contain thinking + text blocks)
+    const textBlock = data.content.find((b) => b.type === 'text');
+    state.claudeResponse = textBlock ? textBlock.text : '(No text returned.)';
+    state.claudeUsage = data.usage;
+  } catch (e) {
+    state.claudeError = e.message || 'Request failed. Check your API key and try again.';
+  } finally {
+    state.claudeLoading = false;
+    render();
+  }
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+render();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
