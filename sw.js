@@ -1,4 +1,4 @@
-const CACHE = 'uro-ref-v1';
+const CACHE = 'uro-ref-v2';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {

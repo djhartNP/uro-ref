@@ -53,16 +53,22 @@
   .icon-btn:active { background: var(--bg-elev-2); }
 
   nav.tabs {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
     border-bottom: 1px solid var(--border);
     background: var(--bg);
     position: sticky; top: 63px; z-index: 9;
   }
   nav.tabs button {
-    padding: 12px 6px; font-size: 13px; color: var(--text-dim);
+    padding: 12px 4px; font-size: 13px; color: var(--text-dim);
     border-bottom: 2px solid transparent;
     font-weight: 500;
   }
+
+  .gloss-list { display: flex; flex-direction: column; gap: 4px; }
+  .gloss-item { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; }
+  .gloss-item .abbr { font-weight: 700; color: var(--accent); font-family: var(--serif); font-size: 16px; min-width: 80px; }
+  .gloss-item .full { color: var(--text); font-size: 14px; line-height: 1.45; }
+  .gloss-item .note { display: block; color: var(--text-dim); font-size: 13px; margin-top: 3px; font-style: italic; }
   nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
 
   main { padding: 16px; max-width: 820px; margin: 0 auto; }
@@ -1295,6 +1301,102 @@ const FLOWCHARTS = [
 ];
 
 /* ============================================================
+   DATA: Glossary (abbreviations & clinical shorthand)
+   ============================================================ */
+const GLOSSARY = [
+  { abbr: '5-ARI', full: '5-alpha reductase inhibitor', note: 'Finasteride, dutasteride. Shrinks prostate; halves PSA (double measured value for ca screening).' },
+  { abbr: 'AFP', full: 'Alpha-fetoprotein', note: 'Testicular tumor marker; elevated in non-seminomatous germ cell tumors. NEVER elevated in pure seminoma.' },
+  { abbr: 'AKI', full: 'Acute kidney injury' },
+  { abbr: 'AUA', full: 'American Urological Association', note: 'Issues the U.S. urology guidelines cited throughout these cards.' },
+  { abbr: 'AUA-SI', full: 'AUA Symptom Index', note: 'Same as IPSS. 7-question LUTS score.' },
+  { abbr: 'BCG', full: 'Bacillus Calmette-Guérin', note: 'Intravesical immunotherapy for non-muscle-invasive bladder cancer (NMIBC).' },
+  { abbr: 'BEP', full: 'Bleomycin, Etoposide, Platinum (cisplatin)', note: 'Standard chemotherapy regimen for metastatic testicular germ cell tumors.' },
+  { abbr: 'BMP', full: 'Basic metabolic panel' },
+  { abbr: 'BPH', full: 'Benign prostatic hyperplasia', note: 'Non-malignant prostate enlargement causing LUTS. Most common cause of male LUTS >50.' },
+  { abbr: 'bHCG', full: 'Beta human chorionic gonadotropin', note: 'Testicular tumor marker; elevated in choriocarcinoma, embryonal ca, some seminomas.' },
+  { abbr: 'BRCA1/2', full: 'Breast cancer gene 1 or 2', note: 'Germline mutations — increased prostate cancer risk; lower threshold for PSA screening.' },
+  { abbr: 'CAD', full: 'Coronary artery disease' },
+  { abbr: 'CBC', full: 'Complete blood count' },
+  { abbr: 'CBI', full: 'Continuous bladder irrigation', note: 'Via 3-way Foley to evacuate clots after hematuria.' },
+  { abbr: 'CBP', full: 'Chronic bacterial prostatitis' },
+  { abbr: 'CHF', full: 'Congestive heart failure' },
+  { abbr: 'CIC', full: 'Clean intermittent catheterization', note: 'Self-catheterization, typically after botox for OAB or for chronic retention.' },
+  { abbr: 'CIS', full: 'Carcinoma in situ', note: 'Flat, high-grade non-invasive urothelial ca; high recurrence; BCG indicated.' },
+  { abbr: 'CKD', full: 'Chronic kidney disease' },
+  { abbr: 'CPPS', full: 'Chronic pelvic pain syndrome', note: 'Chronic prostatitis category III; usually non-bacterial; multimodal therapy.' },
+  { abbr: 'CrCl', full: 'Creatinine clearance', note: 'Renal function estimate; nitrofurantoin contraindicated if <30.' },
+  { abbr: 'CT KUB', full: 'CT of kidneys, ureters, bladder', note: 'Non-contrast CT; gold standard for stone evaluation.' },
+  { abbr: 'CVA', full: 'Costovertebral angle', note: 'CVA tenderness = flank tenderness; suggests pyelonephritis or renal pathology.' },
+  { abbr: 'CVD', full: 'Cardiovascular disease' },
+  { abbr: 'DM', full: 'Diabetes mellitus' },
+  { abbr: 'DRE', full: 'Digital rectal exam', note: 'Prostate palpation; assess size, nodules, consistency. Gentle in acute prostatitis.' },
+  { abbr: 'EAU', full: 'European Association of Urology', note: 'European guideline body; sometimes differs from AUA.' },
+  { abbr: 'ED', full: 'Erectile dysfunction' },
+  { abbr: 'eGFR', full: 'Estimated glomerular filtration rate', note: 'Renal function marker; guides drug dosing and contrast decisions.' },
+  { abbr: 'ESBL', full: 'Extended-spectrum beta-lactamase', note: 'Resistant organism (usually E. coli, Klebsiella) — needs carbapenem or pip-tazo.' },
+  { abbr: 'ESWL', full: 'Extracorporeal shock wave lithotripsy', note: 'Non-invasive stone treatment; less effective on large/lower-pole stones.' },
+  { abbr: 'FH', full: 'Family history' },
+  { abbr: 'FQ', full: 'Fluoroquinolone', note: 'Cipro, levofloxacin. Restricted use due to tendon, CNS, dysglycemia risks.' },
+  { abbr: 'GC', full: 'Gonococcus (Neisseria gonorrhoeae)', note: 'Treat with ceftriaxone 500 mg IM + doxy for presumed chlamydia co-infection.' },
+  { abbr: 'HoLEP', full: 'Holmium laser enucleation of the prostate', note: 'BPH surgical option, best for very large glands.' },
+  { abbr: 'HPF', full: 'High-power field', note: 'UA reporting unit. ≥3 RBC/HPF = microhematuria threshold.' },
+  { abbr: 'HTN', full: 'Hypertension' },
+  { abbr: 'IIEF-5', full: 'International Index of Erectile Function (short form)', note: 'Also called SHIM. 5-item ED severity score.' },
+  { abbr: 'IPSS', full: 'International Prostate Symptom Score', note: 'Same as AUA-SI. 7-question LUTS score: 0-7 mild, 8-19 mod, 20-35 severe.' },
+  { abbr: 'IV / IM / PO', full: 'Intravenous / intramuscular / by mouth', note: 'Routes of drug administration.' },
+  { abbr: 'KUB', full: 'Kidneys, ureters, bladder', note: 'Plain x-ray for tracking radiopaque stones over time.' },
+  { abbr: 'LDH', full: 'Lactate dehydrogenase', note: 'Non-specific tumor marker; tracks testicular cancer burden.' },
+  { abbr: 'LUTS', full: 'Lower urinary tract symptoms', note: 'Umbrella term: storage (urgency, frequency, nocturia) + voiding (hesitancy, weak stream, incomplete emptying).' },
+  { abbr: 'MET', full: 'Medical expulsive therapy', note: 'Tamsulosin for ureteral stones 5-10 mm to aid passage.' },
+  { abbr: 'mpMRI', full: 'Multiparametric MRI (of prostate)', note: 'Evaluated with PI-RADS 1-5; ≥3 generally warrants biopsy.' },
+  { abbr: 'MS', full: 'Multiple sclerosis', note: 'Consider in unexplained new-onset voiding dysfunction.' },
+  { abbr: 'MUSE', full: 'Medicated Urethral System for Erection', note: 'Intraurethral alprostadil pellet. Second-line ED therapy.' },
+  { abbr: 'NAION', full: 'Non-arteritic anterior ischemic optic neuropathy', note: 'Rare PDE5i side effect: sudden unilateral vision loss. Emergency.' },
+  { abbr: 'NMIBC', full: 'Non-muscle-invasive bladder cancer', note: 'Stage Ta, T1, CIS. Managed with TURBT +/- intravesical therapy.' },
+  { abbr: 'NP', full: 'Nurse practitioner' },
+  { abbr: 'NSAID', full: 'Non-steroidal anti-inflammatory drug', note: 'First-line for renal colic pain. Caution with eGFR.' },
+  { abbr: 'N/V', full: 'Nausea and vomiting' },
+  { abbr: 'OAB', full: 'Overactive bladder', note: 'Urgency +/- urge incontinence, often with frequency/nocturia, without infection.' },
+  { abbr: 'OTC', full: 'Over-the-counter', note: 'Ask about OTC meds — decongestants and antihistamines can precipitate urinary retention.' },
+  { abbr: 'PCN', full: 'Percutaneous nephrostomy', note: 'Tube drainage through skin into renal pelvis. Used for obstructed infected kidney.' },
+  { abbr: 'PCNL', full: 'Percutaneous nephrolithotomy', note: 'Minimally-invasive removal of large (>2 cm) renal stones through a flank tract.' },
+  { abbr: 'PDE5i', full: 'Phosphodiesterase-5 inhibitor', note: 'Sildenafil, tadalafil, vardenafil, avanafil. First-line ED therapy.' },
+  { abbr: 'PFMT', full: 'Pelvic floor muscle training', note: 'Kegels with a pelvic floor PT. First-line for SUI and adjunct for OAB.' },
+  { abbr: 'PHI', full: 'Prostate Health Index', note: 'Multi-marker serum test refining biopsy decisions on elevated PSA.' },
+  { abbr: 'PI-RADS', full: 'Prostate Imaging Reporting and Data System', note: 'mpMRI risk score 1-5. PI-RADS 3 = equivocal; 4-5 = proceed to biopsy.' },
+  { abbr: 'PSA', full: 'Prostate-specific antigen', note: 'Serum marker used for prostate ca screening. Halved by 5-ARIs. Elevated transiently by prostatitis, ejaculation, instrumentation.' },
+  { abbr: 'PT', full: 'Physical therapy' },
+  { abbr: 'PTNS', full: 'Percutaneous tibial nerve stimulation', note: 'Third-line OAB therapy: 12 weekly 30-minute sessions.' },
+  { abbr: 'PVP', full: 'Photoselective vaporization of the prostate', note: 'GreenLight laser BPH surgery.' },
+  { abbr: 'PVR', full: 'Post-void residual', note: 'Bladder scan after voiding. Elevated suggests incomplete emptying/retention.' },
+  { abbr: 'RBC', full: 'Red blood cell' },
+  { abbr: 'RCC', full: 'Renal cell carcinoma', note: 'Kidney cancer; classic triad (flank pain, mass, hematuria) is late presentation.' },
+  { abbr: 'RNMS', full: 'Rare non-motile sperm', note: 'Post-vasectomy SA result; ≤100,000/mL acceptable per AUA.' },
+  { abbr: 'RPLND', full: 'Retroperitoneal lymph node dissection', note: 'Staging/treatment for non-seminomatous testicular cancer.' },
+  { abbr: 'RT', full: 'Radiation therapy' },
+  { abbr: 'SA', full: 'Semen analysis', note: 'Post-vasectomy confirmation of azoospermia at 8-16 weeks.' },
+  { abbr: 'SHIM', full: 'Sexual Health Inventory for Men', note: 'Same as IIEF-5.' },
+  { abbr: 'STI', full: 'Sexually transmitted infection' },
+  { abbr: 'SUI', full: 'Stress urinary incontinence', note: 'Leakage with cough, sneeze, exertion; no urge.' },
+  { abbr: 'SWL', full: 'Shock wave lithotripsy', note: 'Same as ESWL — non-invasive stone treatment.' },
+  { abbr: 'TMP-SMX', full: 'Trimethoprim-sulfamethoxazole (Bactrim)', note: 'Empiric UTI choice only if local E. coli resistance <20%.' },
+  { abbr: 'TRT', full: 'Testosterone replacement therapy', note: 'For confirmed hypogonadism. Suppresses spermatogenesis — address fertility first.' },
+  { abbr: 'TRUS', full: 'Transrectal ultrasound', note: 'Used in prostate biopsy guidance.' },
+  { abbr: 'TURBT', full: 'Transurethral resection of bladder tumor', note: 'Diagnostic and therapeutic for bladder cancer.' },
+  { abbr: 'TURP', full: 'Transurethral resection of the prostate', note: 'Workhorse BPH surgery for prostates <80 cc.' },
+  { abbr: 'TWOC', full: 'Trial without catheter', note: 'Remove Foley 3-7 days after retention episode; ~40-50% succeed on first attempt.' },
+  { abbr: 'UA', full: 'Urinalysis' },
+  { abbr: 'URS', full: 'Ureteroscopy', note: 'Endoscopic stone treatment; most common definitive therapy for ureteral/renal stones.' },
+  { abbr: 'UTI', full: 'Urinary tract infection' },
+  { abbr: 'UVJ', full: 'Ureterovesical junction', note: 'Where ureter meets bladder; common site for stones to lodge.' },
+  { abbr: 'qhs / qAM / qday', full: 'Every night at bedtime / every morning / every day', note: 'Latin abbreviations for medication timing.' },
+  { abbr: 'BID / TID / QID', full: 'Twice / three times / four times daily', note: 'Medication frequency.' },
+  { abbr: 'Fr', full: 'French (catheter size)', note: '1 Fr = 1/3 mm outer diameter. 16-18 Fr is typical adult urethral.' },
+  { abbr: 'Foley', full: 'Foley catheter', note: 'Indwelling urethral catheter with inflatable balloon.' },
+  { abbr: 'Coudé', full: 'Coudé-tip catheter', note: 'Bent-tip catheter for navigating enlarged prostate.' }
+];
+
+/* ============================================================
    APP STATE
    ============================================================ */
 const LS = {
@@ -1317,6 +1419,7 @@ const state = {
   gaps: LS.get('gaps', []),
   showSettings: false,
   showGapAdd: false,
+  glossarySearch: '',
   vignette: '',
   claudeResponse: null,
   claudeLoading: false,
@@ -1369,6 +1472,7 @@ function render() {
   parts.push('<main>');
   if (state.view === 'reference') parts.push(renderReferenceView());
   else if (state.view === 'flowcharts') parts.push(renderFlowchartsView());
+  else if (state.view === 'glossary') parts.push(renderGlossaryView());
   else if (state.view === 'claude') parts.push(renderClaudeView());
   else if (state.view === 'gaps') parts.push(renderGapsView());
   parts.push('</main>');
@@ -1416,9 +1520,10 @@ function renderTabs() {
   const tab = (id, label) => `<button class="${state.view === id ? 'active' : ''}" data-tab="${id}">${label}</button>`;
   return `
     <nav class="tabs">
-      ${tab('reference', 'Reference')}
+      ${tab('reference', 'Cards')}
       ${tab('flowcharts', 'Flows')}
-      ${tab('claude', 'Ask Claude')}
+      ${tab('glossary', 'Gloss.')}
+      ${tab('claude', 'Ask')}
       ${tab('gaps', 'Gaps')}
     </nav>
   `;
@@ -1604,6 +1709,31 @@ function inlineMd(s) {
   return out;
 }
 
+function renderGlossaryView() {
+  const q = state.glossarySearch.toLowerCase().trim();
+  const filtered = q
+    ? GLOSSARY.filter((g) => g.abbr.toLowerCase().includes(q) || g.full.toLowerCase().includes(q) || (g.note || '').toLowerCase().includes(q))
+    : GLOSSARY.slice().sort((a, b) => a.abbr.localeCompare(b.abbr, undefined, { sensitivity: 'base' }));
+  return `
+    <h2 style="font-family:var(--serif);color:var(--accent);margin:0 0 6px;font-size:20px;">Glossary</h2>
+    <p style="color:var(--text-dim);font-size:14px;margin:0 0 14px;">Common urology abbreviations and clinical shorthand. Tap to search.</p>
+    <div class="search-bar">
+      <input type="search" placeholder="Search abbreviations..." value="${esc(state.glossarySearch)}" data-field="gloss-search" autocomplete="off">
+    </div>
+    <div class="gloss-list">
+      ${filtered.length === 0 ? '<div class="empty">No matches.</div>' : filtered.map((g) => `
+        <div class="gloss-item">
+          <div class="abbr">${esc(g.abbr)}</div>
+          <div>
+            <div class="full">${esc(g.full)}</div>
+            ${g.note ? `<div class="note">${esc(g.note)}</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
 function renderGapsView() {
   return `
     <div>
@@ -1726,6 +1856,28 @@ function wireEvents() {
   document.querySelectorAll('[data-cat]').forEach((el) => {
     el.addEventListener('click', () => { state.category = el.dataset.cat; render(); });
   });
+  // Glossary search
+  const glossEl = document.querySelector('[data-field="gloss-search"]');
+  if (glossEl) {
+    glossEl.addEventListener('input', (e) => {
+      state.glossarySearch = e.target.value;
+      const listEl = document.querySelector('.gloss-list');
+      if (!listEl) return;
+      const q = state.glossarySearch.toLowerCase().trim();
+      const filtered = q
+        ? GLOSSARY.filter((g) => g.abbr.toLowerCase().includes(q) || g.full.toLowerCase().includes(q) || (g.note || '').toLowerCase().includes(q))
+        : GLOSSARY.slice().sort((a, b) => a.abbr.localeCompare(b.abbr, undefined, { sensitivity: 'base' }));
+      listEl.innerHTML = filtered.length === 0 ? '<div class="empty">No matches.</div>' : filtered.map((g) => `
+        <div class="gloss-item">
+          <div class="abbr">${esc(g.abbr)}</div>
+          <div>
+            <div class="full">${esc(g.full)}</div>
+            ${g.note ? `<div class="note">${esc(g.note)}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    });
+  }
   // Flowchart select
   document.querySelectorAll('[data-flow]').forEach((el) => {
     el.addEventListener('click', () => {
